@@ -62,10 +62,12 @@ jhub/
 │   ├── migrations/         # Define database table structure
 │   └── seeders/            # Populate the database with initial data
 ├── public/
+    ├── build/
+    ├── fonts/
 │   └── images/             # Stock photos and static images
 ├── resources/
 │   ├── css/
-│   │   └── app.css         # Tailwind CSS entry point
+│   │   └── app.css         # Tailwind CSS entry point and tailwind config point(V4 has no config file)
 │   ├── js/
 │   │   └── app.js          # Alpine.js entry point
 │   └── views/              # All Blade templates (HTML pages)
@@ -81,8 +83,7 @@ jhub/
 │   └── web.php             # All URL route definitions
 ├── storage/
 │   └── logs/
-│       └── laravel.log     # Application log file (errors, warnings, info)
-├── tailwind.config.js      # Tailwind CSS configuration
+│       └── laravel.log     # Application log file (errors, warnings, info)      
 ├── vite.config.js          # Vite bundler configuration
 └── .env                    # Environment variables (DB credentials, app key, etc.)
 ```

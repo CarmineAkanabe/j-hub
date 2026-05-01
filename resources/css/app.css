@@ -5,6 +5,50 @@
 @source '../**/*.blade.php';
 @source '../**/*.js';
 
+/* Inter Font Weights */
+@font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    src: url('../../public/fonts/inter-v20-latin-regular.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    src: url('../../public/fonts/inter-v20-latin-500.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 600;
+    src: url('../../public/fonts/inter-v20-latin-600.woff2') format('woff2');
+}
+
+/* Plus Jakarta Sans Font Weights */
+@font-face {
+    font-family: 'Plus Jakarta Sans';
+    font-style: normal;
+    font-weight: 400;
+    src: url('../../public/fonts/plus-jakarta-sans-v12-latin-regular.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'Plus Jakarta Sans';
+    font-style: normal;
+    font-weight: 500;
+    src: url('../../public/fonts/plus-jakarta-sans-v12-latin-500.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'Plus Jakarta Sans';
+    font-style: normal;
+    font-weight: 600;
+    src: url('../../public/fonts/plus-jakarta-sans-v12-latin-600.woff2') format('woff2');
+}
+
 @font-face {
     font-family: 'Plus Jakarta Sans';
     font-style: normal;
@@ -12,14 +56,52 @@
     src: url('../../public/fonts/plus-jakarta-sans-v12-latin-700.woff2') format('woff2');
 }
 
+@font-face {
+    font-family: 'Plus Jakarta Sans';
+    font-style: normal;
+    font-weight: 800;
+    src: url('../../public/fonts/plus-jakarta-sans-v12-latin-800.woff2') format('woff2');
+}
+
 @theme {
     /* Fonts */
-    --font-heading: 'Plus Jakarta Sans', sans-serif;
-    --font-body: 'Inter', sans-serif;
+    --font-heading: 'Plus Jakarta Sans', system-ui, sans-serif;
+    --font-body: 'Inter', system-ui, sans-serif;
 
-    /* Colors */
+    /* Primary Colors (Blue) */
     --color-primary: #2563EB;
     --color-primary-hover: #1D4ED8;
+    --color-primary-light: #DBEAFE;
+    --color-primary-dark: #1E40AF;
+
+    /* Secondary Colors (Navy) */
     --color-secondary: #1E3A8A;
     --color-secondary-hover: #172554;
+    --color-secondary-light: #EFF6FF;
+    --color-secondary-dark: #0F172A;
+
+    /* Neutral Colors */
+    --color-text: #111827;
+    --color-text-light: #6B7280;
+    --color-text-lighter: #9CA3AF;
+    --color-border: #E5E7EB;
+    --color-border-light: #F3F4F6;
+    --color-background: #FFFFFF;
+    --color-background-light: #F9FAFB;
+
+    /* Semantic Colors */
+    --color-success: #10B981;
+    --color-success-light: #D1FAE5;
+    --color-error: #EF4444;
+    --color-error-light: #FEE2E2;
+    --color-warning: #F59E0B;
+    --color-warning-light: #FEF3C7;
+    --color-info: #3B82F6;
+    --color-info-light: #DBEAFE;
+
+    /* Radius */
+    --radius-sm: 0.375rem;
+    --radius: 0.5rem;
+    --radius-md: 0.625rem;
+    --radius-lg: 0.75rem;
 }
