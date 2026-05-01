@@ -1,3 +1,17 @@
-<div>
-    <!-- Nothing in life is to be feared, it is only to be understood. Now is the time to understand more, so that we may fear less. - Maria Skłodowska-Curie -->
-</div>
+@props([
+    'variant' => 'default',
+    'class' => '',
+])
+
+@php
+$variants = [
+    'default' => 'bg-slate-100 text-slate-800',
+    'success' => 'bg-emerald-100 text-emerald-800',
+    'error' => 'bg-rose-100 text-rose-800',
+    'warning' => 'bg-amber-100 text-amber-800',
+    'info' => 'bg-sky-100 text-sky-800',
+];
+$badgeClasses = trim("inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold {$variants[$variant] ?? $variants['default']} {$class}");
+@endphp
+
+<span {{ $attributes->merge(['class' => $badgeClasses]) }}>{{ $slot }}</span>
