@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\Job;
 
-use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateJobRequest extends FormRequest
@@ -12,7 +11,7 @@ class UpdateJobRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,7 +22,11 @@ class UpdateJobRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'title' => ['sometimes', 'string'],
+            'description' => ['sometimes', 'string'],
+            'location' => ['sometimes', 'string'],
+            'expected_salary' => ['sometimes', 'nullable', 'numeric', 'min:0'],
+            'status' => ['sometimes', 'in:open,closed,paused'],
         ];
     }
 }

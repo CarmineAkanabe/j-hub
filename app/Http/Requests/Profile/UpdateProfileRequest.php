@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests\Profile;
 
-use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateProfileRequest extends FormRequest
 {
@@ -12,7 +12,7 @@ class UpdateProfileRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,7 +23,14 @@ class UpdateProfileRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => ['required', 'string'],
+            'email' => [
+                'required',
+                'email',
+                Rule::unique('users', 'email')->ignore($this->user()?->id),
+            ],
+            'resume' => ['nullable', 'string'],
+            'company_name' => ['nullable', 'string'],
         ];
     }
 }

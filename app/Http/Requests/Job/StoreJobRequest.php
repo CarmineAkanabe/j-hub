@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\Job;
 
-use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreJobRequest extends FormRequest
@@ -12,7 +11,7 @@ class StoreJobRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,7 +22,11 @@ class StoreJobRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'title' => ['required', 'string'],
+            'description' => ['required', 'string'],
+            'location' => ['required', 'string'],
+            'expected_salary' => ['nullable', 'numeric', 'min:0'],
+            'status' => ['required', 'in:open,closed,paused'],
         ];
     }
 }
