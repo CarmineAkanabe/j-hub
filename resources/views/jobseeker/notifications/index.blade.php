@@ -16,7 +16,12 @@
                     @foreach ($notifications as $notification)
                         <div class="rounded-3xl border border-slate-200 bg-slate-50 p-6">
                             <p class="text-slate-900">{{ $notification->message }}</p>
-                            <p class="mt-2 text-sm text-slate-500">{{ $notification->date->format('M d, Y') }}</p>
+                            <div class="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                                <p class="text-sm text-slate-500">{{ $notification->date->format('M d, Y') }}</p>
+                                @if ($notification->action_url)
+                                    <x-ui.button href="{{ $notification->action_url }}" variant="secondary" size="sm">View</x-ui.button>
+                                @endif
+                            </div>
                         </div>
                     @endforeach
                 </div>

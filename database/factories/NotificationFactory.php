@@ -18,8 +18,9 @@ class NotificationFactory extends Factory
     public function definition(): array
     {
         return [
-            'message' => fake()->sentence(),
-            'date'    => now(),
+            'message'    => fake()->sentence(),
+            'action_url' => null,
+            'date'       => now(),
         ];
     }
 }

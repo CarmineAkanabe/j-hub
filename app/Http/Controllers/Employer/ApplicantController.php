@@ -61,6 +61,7 @@ class ApplicantController extends Controller
 
         $application->jobSeeker->notifications()->create([
             'message' => "Your application for {$application->job->title} has been {$status->value}.",
+            'action_url' => route('jobseeker.applications.show', $application),
             'date' => now()->toDateString(),
         ]);
 

@@ -5,6 +5,8 @@
             class="block rounded-xl px-4 py-3 {{ request()->routeIs('jobseeker.dashboard') ? 'bg-slate-900' : '' }} hover:bg-slate-800">Dashboard</a>
         <a href="/jobseeker/applications"
             class="block rounded-xl px-4 py-3 {{ request()->routeIs('jobseeker.applications.*') ? 'bg-slate-900' : '' }} hover:bg-slate-800">Applications</a>
+        <a href="/jobseeker/comments"
+            class="block rounded-xl px-4 py-3 {{ request()->routeIs('jobseeker.comments.*') ? 'bg-slate-900' : '' }} hover:bg-slate-800">Comments</a>
         <a href="/jobseeker/notifications"
             class="block rounded-xl px-4 py-3 {{ request()->routeIs('jobseeker.notifications.*') ? 'bg-slate-900' : '' }} hover:bg-slate-800">Notifications</a>
         <a href="/jobseeker/profile"

@@ -46,9 +46,23 @@
 
                     <div class="mt-6 space-y-4">
                         @forelse($job->comments as $comment)
-                            <div class="rounded-3xl border border-slate-200 bg-slate-50 p-4">
-                                <p class="text-sm text-slate-500">{{ $comment->user->name }} ·
-                                    {{ $comment->date->format('M d, Y') }}</p>
+                            <div id="comment-{{ $comment->id }}" class="rounded-3xl border border-slate-200 bg-slate-50 p-4">
+                                <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                                    <p class="text-sm text-slate-500">{{ $comment->user->name }} ·
+                                        {{ $comment->date->format('M d, Y') }}</p>
+
+                                    @if (auth()->check() && auth()->id() === $comment->user_id)
+                                        <div class="flex gap-2">
+                                            <x-ui.button href="{{ route('jobseeker.comments.edit', $comment) }}"
+                                                variant="secondary" size="sm">Edit</x-ui.button>
+                                            <form method="POST" action="{{ route('jobseeker.comments.destroy', $comment) }}">
+                                                @csrf
+                                                @method('DELETE')
+                                                <x-ui.button type="submit" variant="danger" size="sm">Delete</x-ui.button>
+                                            </form>
+                                        </div>
+                                    @endif
+                                </div>
                                 <p class="mt-2 text-slate-700">{{ $comment->content }}</p>
                             </div>
                         @empty

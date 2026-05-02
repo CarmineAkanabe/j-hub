@@ -11,7 +11,7 @@ class Notification extends Model
 
     use HasFactory;
 
-    protected $fillable = ['user_id', 'message', 'date'];
+    protected $fillable = ['user_id', 'message', 'action_url', 'date'];
 
     protected $casts = ['date' => 'date'];
 

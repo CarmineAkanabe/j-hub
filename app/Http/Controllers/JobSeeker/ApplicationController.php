@@ -47,6 +47,7 @@ class ApplicationController extends Controller
         if ($employer) {
             $employer->notifications()->create([
                 'message' => "New application received from {$user->name} for {$job->title}.",
+                'action_url' => route('employer.applicants.show', $application),
                 'date' => now()->toDateString(),
             ]);
         }

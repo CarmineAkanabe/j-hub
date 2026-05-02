@@ -51,6 +51,10 @@ Route::middleware(['auth', 'role:jobseeker'])->prefix('jobseeker')->name('jobsee
     Route::get('/dashboard', [JobSeekerDashboardController::class, 'index'])->name('dashboard');
     Route::get('/applications', [JobSeekerApplicationController::class, 'index'])->name('applications.index');
     Route::get('/applications/{application}', [JobSeekerApplicationController::class, 'show'])->name('applications.show');
+    Route::get('/comments', [CommentController::class, 'index'])->name('comments.index');
+    Route::get('/comments/{comment}/edit', [CommentController::class, 'edit'])->name('comments.edit');
+    Route::patch('/comments/{comment}', [CommentController::class, 'update'])->name('comments.update');
+    Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
     Route::get('/notifications', [JobSeekerNotificationController::class, 'index'])->name('notifications.index');
     Route::get('/profile', [JobSeekerProfileController::class, 'edit'])->name('profile');
     Route::patch('/profile', [JobSeekerProfileController::class, 'update'])->name('profile.update');
@@ -73,5 +77,4 @@ Route::get('/register/jobseeker', [RegisterController::class, 'showJobSeekerForm
 Route::post('/register/jobseeker', [RegisterController::class, 'registerJobSeeker'])->name('register.jobseeker.store');
 Route::get('/register/employer', [RegisterController::class, 'showEmployerForm'])->name('register.employer.show');
 Route::post('/register/employer', [RegisterController::class, 'registerEmployer'])->name('register.employer.store');
-
 
