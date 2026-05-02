@@ -23,6 +23,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/jobs', [JobController::class, 'index'])->name('jobs.index');
 Route::get('/jobs/{job}', [JobController::class, 'show'])->name('jobs.show');
+Route::view('/about', 'public.about')->name('about');
+
 Route::middleware(['auth', 'role:jobseeker'])->group(function () {
     Route::post('/jobs/{job}/apply', [JobSeekerApplicationController::class, 'store'])->name('jobs.apply');
     Route::post('/jobs/{job}/comments', [CommentController::class, 'store'])->name('comments.store');
