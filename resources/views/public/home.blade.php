@@ -55,7 +55,8 @@
             @endif
 
             <div class="text-center">
-                <x-ui.button variant="ghost" href="#" class="text-primary-600 hover:text-primary-700">
+                <x-ui.button variant="ghost" href="{{ route('jobs.index') }}"
+                    class="text-primary-600 hover:text-primary-700">
                     View All Jobs →
                 </x-ui.button>
             </div>
