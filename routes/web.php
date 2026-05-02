@@ -2,7 +2,11 @@
 
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Public\HomeController;
 use Illuminate\Support\Facades\Route;
+
+// === Home Route ===
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 // === Auth Routes (Public) ===
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
