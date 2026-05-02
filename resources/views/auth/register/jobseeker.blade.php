@@ -1,4 +1,4 @@
-@extends('layouts.auth')
+@extends('layouts.public')
 @section('title', 'Register as Job Seeker')
 
 @section('content')

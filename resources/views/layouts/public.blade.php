@@ -9,7 +9,11 @@
 </head>
 
 <body class="min-h-screen bg-slate-50 text-slate-900 font-body">
-    @include('components.navbar.public-navbar')
+    @if (auth()->check())
+        @include('components.navbar.auth-navbar')
+    @else
+        @include('components.navbar.public-navbar')
+    @endif
 
     <main class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         @yield('content')
