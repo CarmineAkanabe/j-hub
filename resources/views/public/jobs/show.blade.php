@@ -5,7 +5,8 @@
         <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
                 <h1 class="text-3xl font-bold text-slate-900">{{ $job->title }}</h1>
-                <p class="text-sm text-slate-500">{{ $job->employer->company_name ?? ($job->employer->name ?? 'Employer') }} ·
+                <p class="text-sm text-slate-500">{{ $job->employer->company_name ?? ($job->employer->name ?? 'Employer') }}
+                    ·
                     {{ $job->location }}</p>
             </div>
             <div class="flex flex-wrap items-center gap-3">
@@ -16,6 +17,18 @@
                 @endif
             </div>
         </div>
+
+        @if (session('success'))
+            <div class="mt-6">
+                <x-ui.alert type="success">{{ session('success') }}</x-ui.alert>
+            </div>
+        @endif
+
+        @if (session('error'))
+            <div class="mt-6">
+                <x-ui.alert type="error">{{ session('error') }}</x-ui.alert>
+            </div>
+        @endif
 
         <div class="grid gap-8 lg:grid-cols-[1fr_280px]">
             <article class="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
@@ -37,14 +50,33 @@
 
                 <div>
                     <h2 class="text-lg font-semibold text-slate-900 mb-3">Next Step</h2>
-                    <p class="text-sm text-slate-600 mb-4">To apply for this role, please log in or register as a job
-                        seeker.</p>
-                    <div class="flex flex-col gap-3 sm:flex-row">
-                        <a href="{{ route('login') }}"
-                            class="inline-flex items-center justify-center rounded-full bg-primary-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-primary-700">Login</a>
-                        <a href="{{ route('register.jobseeker.show') }}"
-                            class="inline-flex items-center justify-center rounded-full border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-900 transition hover:bg-slate-100">Register</a>
-                    </div>
+                    @if (auth()->check() && auth()->user()->isJobSeeker())
+                        @if (isset($userApplication) && $userApplication)
+                            <p class="text-sm text-slate-600 mb-4">You have already applied for this role.</p>
+                            <div class="rounded-3xl bg-slate-100 p-4 text-sm text-slate-700">
+                                <p>Status: <strong>{{ ucfirst($userApplication->status->value) }}</strong></p>
+                                <p class="mt-2">Applied on {{ $userApplication->date->format('M d, Y') }}.</p>
+                            </div>
+                        @else
+                            <p class="text-sm text-slate-600 mb-4">Ready to apply? Submit your application below.</p>
+                            <form method="POST" action="{{ route('jobs.apply', $job) }}">
+                                @csrf
+                                <x-ui.button type="submit" variant="primary">Apply for this job</x-ui.button>
+                            </form>
+                        @endif
+                    @elseif(auth()->check())
+                        <p class="text-sm text-slate-600 mb-4">Only job seekers can apply for positions. Please switch to a
+                            job seeker account.</p>
+                    @else
+                        <p class="text-sm text-slate-600 mb-4">To apply for this role, please log in or register as a job
+                            seeker.</p>
+                        <div class="flex flex-col gap-3 sm:flex-row">
+                            <a href="{{ route('login') }}"
+                                class="inline-flex items-center justify-center rounded-full bg-primary-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-primary-700">Login</a>
+                            <a href="{{ route('register.jobseeker.show') }}"
+                                class="inline-flex items-center justify-center rounded-full border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-900 transition hover:bg-slate-100">Register</a>
+                        </div>
+                    @endif
                 </div>
             </aside>
         </div>

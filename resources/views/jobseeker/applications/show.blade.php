@@ -10,7 +10,9 @@
             <div>
                 <h1 class="text-3xl font-bold text-slate-900">{{ $application->job->title }}</h1>
                 <p class="mt-2 text-sm text-slate-600">Application status:
-                    <strong>{{ ucfirst($application->status->value) }}</strong></p>
+                    <x-ui.badge
+                        variant="{{ $application->status->value === 'accepted' ? 'success' : ($application->status->value === 'refused' ? 'error' : 'warning') }}">{{ ucfirst($application->status->value) }}</x-ui.badge>
+                </p>
             </div>
             <x-ui.button href="{{ route('jobseeker.applications.index') }}" variant="secondary">Back to
                 Applications</x-ui.button>
@@ -33,7 +35,9 @@
 
             <aside class="rounded-3xl border border-slate-200 bg-slate-50 p-6 shadow-sm">
                 <h2 class="text-lg font-semibold text-slate-900">Application Summary</h2>
-                <p class="mt-4 text-sm text-slate-600">Status: <strong>{{ ucfirst($application->status->value) }}</strong>
+                <p class="mt-4 text-sm text-slate-600">Status:
+                    <x-ui.badge
+                        variant="{{ $application->status->value === 'accepted' ? 'success' : ($application->status->value === 'refused' ? 'error' : 'warning') }}">{{ ucfirst($application->status->value) }}</x-ui.badge>
                 </p>
                 <p class="mt-2 text-sm text-slate-600">Job location: {{ $application->job->location }}</p>
                 <p class="mt-2 text-sm text-slate-600">Salary:

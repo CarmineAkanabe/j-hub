@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers\JobSeeker;
 
+use App\Enums\ApplicationStatus;
+use App\Enums\JobStatus;
 use App\Http\Controllers\Controller;
 use App\Models\Application;
+use App\Models\Job;
 use Illuminate\Http\Request;
 
 class ApplicationController extends Controller
@@ -20,5 +23,34 @@ class ApplicationController extends Controller
         $application = auth()->user()->applications()->with('job.employer')->findOrFail($application->id);
 
         return view('jobseeker.applications.show', compact('application'));
+    }
+
+    public function store(Job $job)
+    {
+        $user = auth()->user();
+
+        if ($user->applications()->where('job_id', $job->id)->exists()) {
+            return back()->with('error', 'You have already applied for this job.');
+        }
+
+        if ($job->status !== JobStatus::OPEN) {
+            return back()->with('error', 'This job is not open for applications.');
+        }
+
+        $application = $user->applications()->create([
+            'job_id' => $job->id,
+            'status' => ApplicationStatus::PENDING,
+            'date' => now()->toDateString(),
+        ]);
+
+        $employer = $job->employer;
+        if ($employer) {
+            $employer->notifications()->create([
+                'message' => "New application received from {$user->name} for {$job->title}.",
+                'date' => now()->toDateString(),
+            ]);
+        }
+
+        return back()->with('success', 'Your application has been submitted successfully.');
     }
 }

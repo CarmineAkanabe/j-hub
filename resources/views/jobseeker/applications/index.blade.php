@@ -22,8 +22,8 @@
                             <p class="mt-1 text-sm text-slate-500">{{ $application->job->location }} ·
                                 {{ $application->job->employer->company_name ?? $application->job->employer->name }}</p>
                         </div>
-                        <span
-                            class="rounded-full bg-slate-100 px-3 py-2 text-sm text-slate-700">{{ ucfirst($application->status->value) }}</span>
+                        <x-ui.badge
+                            variant="{{ $application->status->value === 'accepted' ? 'success' : ($application->status->value === 'refused' ? 'error' : 'warning') }}">{{ ucfirst($application->status->value) }}</x-ui.badge>
                     </div>
 
                     <p class="mt-4 text-sm text-slate-600">Applied on {{ $application->date->format('M d, Y') }}</p>

@@ -13,7 +13,7 @@ class DashboardController extends Controller
         $employer = auth()->user();
         $jobCount = $employer->jobs()->count();
         $applicationsCount = Application::whereIn('job_id', $employer->jobs()->pluck('id'))->count();
-        $recentJobs = $employer->jobs()->latest()->take(5)->get();
+        $recentJobs = $employer->jobs()->withCount('applications')->latest()->take(5)->get();
 
         return view('employer.dashboard', compact('jobCount', 'applicationsCount', 'recentJobs'));
     }

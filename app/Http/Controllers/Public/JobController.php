@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Public;
 
+use App\Enums\JobStatus;
 use App\Http\Controllers\Controller;
 use App\Models\Job;
 use Illuminate\Http\Request;
@@ -14,7 +15,7 @@ class JobController extends Controller
         $location = $request->query('location');
 
         $query = Job::with('employer')
-            ->where('status', 'open');
+            ->where('status', JobStatus::OPEN);
 
         if ($search) {
             $query->where(function ($query) use ($search) {
@@ -37,6 +38,14 @@ class JobController extends Controller
     {
         $job->load('employer');
 
-        return view('public.jobs.show', compact('job'));
+        $userApplication = null;
+        if (auth()->check() && auth()->user()->isJobSeeker()) {
+            $userApplication = auth()->user()
+                ->applications()
+                ->where('job_id', $job->id)
+                ->first();
+        }
+
+        return view('public.jobs.show', compact('job', 'userApplication'));
     }
 }
