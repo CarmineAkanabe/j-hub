@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+    <title id="title">J-Hub logo</title>
+    <desc id="desc">A connected briefcase mark for the J-Hub job portal.</desc>
+    <rect width="64" height="64" rx="16" fill="#0f172a"/>
+    <path d="M23 20h18c2.8 0 5 2.2 5 5v18c0 2.8-2.2 5-5 5H23c-2.8 0-5-2.2-5-5V25c0-2.8 2.2-5 5-5Z" fill="#111827" stroke="#34d399" stroke-width="3"/>
+    <path d="M26 20v-3.5c0-2 1.6-3.5 3.5-3.5h5c1.9 0 3.5 1.5 3.5 3.5V20" fill="none" stroke="#34d399" stroke-width="3" stroke-linecap="round"/>
+    <path d="M18 32h12l5-5 5 5h6" fill="none" stroke="#f97316" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M30 32v10c0 2.4-1.6 4-4 4-1.4 0-2.7-.5-3.6-1.4" fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round"/>
+    <path d="M38 29v17" fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="38" cy="24" r="2.4" fill="#ffffff"/>
+</svg>

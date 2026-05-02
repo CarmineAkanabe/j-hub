@@ -1,6 +1,9 @@
 <header class="fixed top-0 w-full bg-slate-950 shadow-sm z-50">
     <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
-        <a href="/" class="text-lg font-semibold text-white">J-Hub</a>
+        <a href="/" class="flex items-center gap-3 text-lg font-semibold text-white">
+            <img src="{{ asset('images/j-hub-logo.svg') }}" alt="J-Hub" class="h-9 w-9">
+            <span>J-Hub</span>
+        </a>
 
         <nav class="hidden gap-6 text-sm text-slate-300 md:flex">
             <a href="{{ route('jobs.index') }}" class="hover:text-white">Jobs</a>

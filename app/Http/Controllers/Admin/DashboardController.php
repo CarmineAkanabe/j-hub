@@ -17,7 +17,25 @@ class DashboardController extends Controller
         $jobCount = Job::count();
         $applicationCount = Application::count();
         $commentCount = Comment::count();
+        $employerCount = User::where('role', UserRole::EMPLOYER)->count();
+        $jobSeekerCount = User::where('role', UserRole::JOBSEEKER)->count();
+        $chartMax = max($employerCount, $jobSeekerCount, 1);
+        $roleChartData = [
+            [
+                'label' => 'Employers',
+                'value' => $employerCount,
+                'width' => round(($employerCount / $chartMax) * 100),
+            ],
+            [
+                'label' => 'Job Seekers',
+                'value' => $jobSeekerCount,
+                'width' => round(($jobSeekerCount / $chartMax) * 100),
+            ],
+        ];
 
-        return view('admin.dashboard', compact('userCount', 'jobCount', 'applicationCount', 'commentCount'));
+        return view(
+            'admin.dashboard',
+            compact('userCount', 'jobCount', 'applicationCount', 'commentCount', 'roleChartData')
+        );
     }
 }

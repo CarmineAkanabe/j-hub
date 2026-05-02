@@ -1,147 +1,170 @@
 @extends('layouts.public')
 
 @section('content')
-    <!-- Hero Section -->
-    <section class="bg-linear-to-br from-primary-50 to-secondary-50 py-20">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center">
-                <h1 class="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
-                    Find Your Dream <span class="text-primary-600">Job</span>
-                </h1>
-                <p class="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
-                    Connect with top employers and discover opportunities that match your skills and aspirations.
-                    J-Hub makes job hunting simple, efficient, and rewarding.
+    <section x-data="{ active: 0, slides: 4 }" x-init="setInterval(() => active = (active + 1) % slides, 6500)"
+        class="relative left-1/2 min-h-[680px] w-screen -translate-x-1/2 overflow-hidden bg-slate-950">
+        <div class="absolute inset-0">
+            <img x-show="active === 0" x-transition.opacity.duration.1000ms src="{{ asset('images/home/interview-office.jpg') }}"
+                alt="Candidate speaking with a recruiter in a bright office"
+                class="absolute inset-0 h-full w-full object-cover opacity-65">
+            <img x-cloak x-show="active === 1" x-transition.opacity.duration.1000ms src="{{ asset('images/home/candidate-review.jpg') }}"
+                alt="Hiring manager reviewing candidate documents"
+                class="absolute inset-0 h-full w-full object-cover opacity-65">
+            <img x-cloak x-show="active === 2" x-transition.opacity.duration.1000ms src="{{ asset('images/home/remote-interview.jpg') }}"
+                alt="Team conducting a remote job interview"
+                class="absolute inset-0 h-full w-full object-cover opacity-65">
+            <img x-cloak x-show="active === 3" x-transition.opacity.duration.1000ms src="{{ asset('images/home/offer-handshake.jpg') }}"
+                alt="Professional handshake after a successful interview"
+                class="absolute inset-0 h-full w-full object-cover opacity-65">
+            <div class="absolute inset-0 bg-slate-950/70"></div>
+            <div class="absolute inset-0 bg-linear-to-r from-slate-950 via-slate-950/70 to-slate-950/20"></div>
+        </div>
+
+        <div class="relative mx-auto flex min-h-[680px] max-w-7xl items-center px-4 py-24 sm:px-6 lg:px-8">
+            <div class="max-w-3xl text-white">
+                <p class="mb-5 inline-flex rounded-full border border-white/25 bg-white/10 px-4 py-2 text-sm font-semibold">
+                    Jobs, applicants, comments, and status updates in one place
                 </p>
-                <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                    <x-ui.button variant="primary" size="lg" href="{{ route('register.jobseeker.show') }}">
-                        Get Started as Job Seeker
+                <h1 class="font-heading text-5xl font-extrabold leading-tight md:text-7xl">
+                    J-Hub connects careers with teams ready to hire.
+                </h1>
+                <p class="mt-6 max-w-2xl text-lg leading-8 text-slate-200 md:text-xl">
+                    Browse open roles, apply with confidence, and keep every application conversation moving inside a
+                    clean Laravel-powered job portal.
+                </p>
+
+                <form method="GET" action="{{ route('jobs.index') }}"
+                    class="mt-8 grid gap-3 rounded-3xl border border-white/15 bg-white/95 p-3 shadow-2xl sm:grid-cols-[1fr_1fr_auto]">
+                    <input name="search" type="search" placeholder="Job title or keyword"
+                        class="min-h-12 rounded-2xl border border-slate-200 px-4 text-sm text-slate-900 outline-none focus:border-slate-900">
+                    <input name="location" type="search" placeholder="Location"
+                        class="min-h-12 rounded-2xl border border-slate-200 px-4 text-sm text-slate-900 outline-none focus:border-slate-900">
+                    <x-ui.button type="submit" variant="primary" size="lg">Search Jobs</x-ui.button>
+                </form>
+
+                <div class="mt-6 flex flex-col gap-3 sm:flex-row">
+                    <x-ui.button variant="secondary" size="lg" href="{{ route('register.jobseeker.show') }}">
+                        Start as Job Seeker
                     </x-ui.button>
-                    <x-ui.button variant="secondary" size="lg" href="{{ route('register.employer.show') }}">
-                        Post a Job as Employer
+                    <x-ui.button variant="outline" size="lg" href="{{ route('register.employer.show') }}"
+                        class="border-white/60 bg-white/10 text-white hover:bg-white hover:text-slate-900">
+                        Hire Talent
                     </x-ui.button>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Featured Jobs Section -->
-    <section class="py-16 bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold text-gray-900 mb-4">Featured Jobs</h2>
-                <p class="text-lg text-gray-600">Discover the latest opportunities from top companies</p>
+    <section class="relative left-1/2 w-screen -translate-x-1/2 bg-white py-10">
+        <div class="mx-auto grid max-w-7xl gap-4 px-4 sm:grid-cols-3 sm:px-6 lg:px-8">
+            <div class="rounded-2xl border border-slate-200 bg-slate-50 p-6">
+                <p class="text-3xl font-bold text-slate-900">{{ number_format($stats['openJobs']) }}</p>
+                <p class="mt-1 text-sm text-slate-600">Open jobs available now</p>
+            </div>
+            <div class="rounded-2xl border border-slate-200 bg-slate-50 p-6">
+                <p class="text-3xl font-bold text-slate-900">{{ number_format($stats['employers']) }}</p>
+                <p class="mt-1 text-sm text-slate-600">Employers posting roles</p>
+            </div>
+            <div class="rounded-2xl border border-slate-200 bg-slate-50 p-6">
+                <p class="text-3xl font-bold text-slate-900">{{ number_format($stats['applications']) }}</p>
+                <p class="mt-1 text-sm text-slate-600">Applications tracked</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="relative left-1/2 w-screen -translate-x-1/2 bg-slate-50 py-20">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+                <div>
+                    <p class="text-sm font-semibold uppercase tracking-wide text-primary">Featured roles</p>
+                    <h2 class="mt-3 text-3xl font-bold text-slate-900 md:text-4xl">Fresh opportunities from active employers</h2>
+                </div>
+                <x-ui.button variant="secondary" href="{{ route('jobs.index') }}">View All Jobs</x-ui.button>
             </div>
 
             @if ($featuredJobs->count() > 0)
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                <div class="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
                     @foreach ($featuredJobs as $job)
                         <x-job.job-card :job="$job" />
                     @endforeach
                 </div>
             @else
-                <div class="text-center py-12">
-                    <svg class="mx-auto h-24 w-24 text-gray-400 mb-4" fill="none" stroke="currentColor"
-                        viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
-                            d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m8 0V8a2 2 0 01-2 2H8a2 2 0 01-2-2V6m8 0H8m0 0V4">
-                        </path>
-                    </svg>
-                    <h3 class="text-lg font-medium text-gray-900 mb-2">No jobs available yet</h3>
-                    <p class="text-gray-500 mb-6">Check back soon for new opportunities!</p>
-                    <x-ui.button variant="primary" href="{{ route('register.employer.show') }}">
-                        Be the first to post a job
-                    </x-ui.button>
+                <div class="mt-10 rounded-3xl border border-dashed border-slate-300 bg-white p-10 text-center">
+                    <h3 class="text-lg font-semibold text-slate-900">No jobs available yet</h3>
+                    <p class="mt-2 text-slate-600">New opportunities will appear here as employers publish them.</p>
+                    <div class="mt-6">
+                        <x-ui.button variant="primary" href="{{ route('register.employer.show') }}">
+                            Be the first to post a job
+                        </x-ui.button>
+                    </div>
                 </div>
             @endif
-
-            <div class="text-center">
-                <x-ui.button variant="ghost" href="{{ route('jobs.index') }}"
-                    class="text-primary-600 hover:text-primary-700">
-                    View All Jobs →
-                </x-ui.button>
-            </div>
         </div>
     </section>
 
-    <!-- Stats Section -->
-    <section class="py-16 bg-gray-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-                <div>
-                    <div class="text-4xl font-bold text-primary-600 mb-2">1,000+</div>
-                    <div class="text-gray-600">Active Jobs</div>
-                </div>
-                <div>
-                    <div class="text-4xl font-bold text-primary-600 mb-2">500+</div>
-                    <div class="text-gray-600">Companies</div>
-                </div>
-                <div>
-                    <div class="text-4xl font-bold text-primary-600 mb-2">10,000+</div>
-                    <div class="text-gray-600">Job Seekers</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- How It Works Section -->
-    <section class="py-16 bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold text-gray-900 mb-4">How J-Hub Works</h2>
-                <p class="text-lg text-gray-600">Simple steps to connect talent with opportunity</p>
+    <section class="relative left-1/2 w-screen -translate-x-1/2 bg-white py-20">
+        <div class="mx-auto grid max-w-7xl gap-10 px-4 sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:px-8">
+            <div>
+                <p class="text-sm font-semibold uppercase tracking-wide text-primary">Built for both sides</p>
+                <h2 class="mt-3 text-3xl font-bold text-slate-900 md:text-4xl">A focused workflow from listing to decision</h2>
+                <p class="mt-5 text-lg leading-8 text-slate-600">
+                    Job seekers get a clear place to apply, comment, and track progress. Employers get a simple dashboard
+                    for postings, applicants, and notifications when candidates interact with their roles.
+                </p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="text-center">
-                    <div class="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <svg class="w-8 h-8 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-semibold text-gray-900 mb-2">Create Your Profile</h3>
-                    <p class="text-gray-600">Sign up as a job seeker or employer and build your professional profile.</p>
+            <div class="grid gap-5 sm:grid-cols-2">
+                <div class="rounded-3xl border border-slate-200 bg-slate-50 p-6">
+                    <p class="text-sm font-semibold text-primary">For job seekers</p>
+                    <h3 class="mt-3 text-xl font-bold text-slate-900">Apply and follow every response</h3>
+                    <p class="mt-3 text-sm leading-6 text-slate-600">
+                        Search jobs, submit applications, manage comments, and see status changes as they happen.
+                    </p>
                 </div>
-
-                <div class="text-center">
-                    <div class="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <svg class="w-8 h-8 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-semibold text-gray-900 mb-2">Find or Post Jobs</h3>
-                    <p class="text-gray-600">Browse opportunities or post positions that match your requirements.</p>
+                <div class="rounded-3xl border border-slate-200 bg-slate-50 p-6">
+                    <p class="text-sm font-semibold text-primary">For employers</p>
+                    <h3 class="mt-3 text-xl font-bold text-slate-900">Review candidates without losing context</h3>
+                    <p class="mt-3 text-sm leading-6 text-slate-600">
+                        Publish jobs, inspect applicants, accept or refuse applications, and receive activity updates.
+                    </p>
                 </div>
-
-                <div class="text-center">
-                    <div class="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <svg class="w-8 h-8 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-semibold text-gray-900 mb-2">Connect & Succeed</h3>
-                    <p class="text-gray-600">Apply to jobs or review applications to find the perfect match.</p>
+                <div class="rounded-3xl border border-slate-200 bg-slate-50 p-6">
+                    <p class="text-sm font-semibold text-primary">For admins</p>
+                    <h3 class="mt-3 text-xl font-bold text-slate-900">Keep the platform accountable</h3>
+                    <p class="mt-3 text-sm leading-6 text-slate-600">
+                        Monitor users, review activity, and handle account cleanup from one protected area.
+                    </p>
+                </div>
+                <div class="rounded-3xl border border-slate-200 bg-slate-950 p-6 text-white">
+                    <p class="text-sm font-semibold text-emerald-300">Simple by design</p>
+                    <h3 class="mt-3 text-xl font-bold">Laravel, Blade, Tailwind</h3>
+                    <p class="mt-3 text-sm leading-6 text-slate-300">
+                        The interface stays straightforward while the core portal features stay easy to extend.
+                    </p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- CTA Section -->
-    <section class="py-16 bg-primary-600">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 class="text-3xl font-bold text-white mb-4">Ready to Get Started?</h2>
-            <p class="text-xl text-primary-100 mb-8">
-                Join thousands of professionals who have found their perfect career match on J-Hub.
+    <section class="relative left-1/2 w-screen -translate-x-1/2 bg-slate-950 py-20">
+        <div class="absolute inset-0">
+            <img src="{{ asset('images/home/offer-handshake.jpg') }}" alt="Successful hiring handshake"
+                class="h-full w-full object-cover opacity-30">
+            <div class="absolute inset-0 bg-slate-950/70"></div>
+        </div>
+
+        <div class="relative mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-white md:text-5xl">Ready to move from browsing to hiring?</h2>
+            <p class="mx-auto mt-5 max-w-2xl text-lg leading-8 text-slate-200">
+                Create an account, publish a role, or start applying to the jobs already waiting inside J-Hub.
             </p>
-            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <div class="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
                 <x-ui.button variant="secondary" size="lg" href="{{ route('register.jobseeker.show') }}">
-                    Start Your Job Search
+                    Find My Next Role
                 </x-ui.button>
                 <x-ui.button variant="outline" size="lg" href="{{ route('register.employer.show') }}"
-                    class="border-white text-white hover:bg-white hover:text-primary-600">
-                    Hire Top Talent
+                    class="border-white/60 bg-white/10 text-white hover:bg-white hover:text-slate-900">
+                    Post a Job
                 </x-ui.button>
             </div>
         </div>

@@ -14,7 +14,20 @@ class DashboardController extends Controller
         $jobCount = $employer->jobs()->count();
         $applicationsCount = Application::whereIn('job_id', $employer->jobs()->pluck('id'))->count();
         $recentJobs = $employer->jobs()->withCount('applications')->latest()->take(5)->get();
+        $chartMax = max($jobCount, $applicationsCount, 1);
+        $chartData = [
+            [
+                'label' => 'Jobs Posted',
+                'value' => $jobCount,
+                'width' => round(($jobCount / $chartMax) * 100),
+            ],
+            [
+                'label' => 'Applications Received',
+                'value' => $applicationsCount,
+                'width' => round(($applicationsCount / $chartMax) * 100),
+            ],
+        ];
 
-        return view('employer.dashboard', compact('jobCount', 'applicationsCount', 'recentJobs'));
+        return view('employer.dashboard', compact('jobCount', 'applicationsCount', 'recentJobs', 'chartData'));
     }
 }

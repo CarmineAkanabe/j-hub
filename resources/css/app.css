@@ -106,6 +106,10 @@
     --radius-lg: 0.75rem;
 }
 
+[x-cloak] {
+    display: none !important;
+}
+
 /* Global link hover */
 a:hover {
     color: #10B981;

@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\Public;
 
 use App\Http\Controllers\Controller;
+use App\Models\Application;
 use App\Models\Job;
-use Illuminate\Http\Request;
+use App\Models\User;
 
 class HomeController extends Controller
 {
@@ -27,11 +28,18 @@ class HomeController extends Controller
         }
 
         // Get featured jobs (open jobs, ordered by creation date)
-        $featuredJobs = Job::where('status', 'open')
+        $featuredJobs = Job::with('employer')
+            ->where('status', 'open')
             ->orderBy('created_at', 'desc')
             ->take(6)
             ->get();
 
-        return view('public.home', compact('featuredJobs'));
+        $stats = [
+            'openJobs' => Job::where('status', 'open')->count(),
+            'employers' => User::where('role', 'employer')->count(),
+            'applications' => Application::count(),
+        ];
+
+        return view('public.home', compact('featuredJobs', 'stats'));
     }
 }

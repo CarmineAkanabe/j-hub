@@ -1,102 +1,111 @@
-# J-Hub — Job Portal System
+# J-Hub - Job Portal System
 
-J-Hub is a web-based job portal that connects job seekers with employers in a clean, straightforward way. Employers post jobs, job seekers apply, and everything in between (notifications, comments, application tracking) is handled within the platform. There's also an admin side for keeping accounts in check and monitoring what's going on in the system.
+J-Hub is a Laravel job portal built as a class project. It connects job seekers, employers, and admins in one clean web application.
 
-Built as a class project using Laravel and Blade, with Tailwind CSS for the UI.
+Visitors can browse jobs. Job seekers can apply, track applications, manage comments, and receive linked notifications. Employers can post jobs, review applicants, accept/refuse applications, and receive activity notifications. Admins can monitor users, logs, and platform totals.
 
----
+## Main Features
 
-## What it does
+**Visitors**
 
-**For visitors**
-- Browse the platform and read about it
-- View job listings and individual job details without needing an account
-- Create an account as either a Job Seeker or an Employer
+- View the homepage and about page
+- Browse open job listings
+- Search jobs by keyword and location
+- View job details
+- Register as a job seeker or employer
 
-**For job seekers**
-- Search and filter available job listings
-- Apply for jobs and track application statuses
-- Leave comments on job posts
-- Receive notifications about application updates
-- Manage their profile and resume
+**Job seekers**
 
-**For employers**
-- Post, edit, and delete job listings
-- Review incoming applications per job
-- Accept or refuse applicants
-- Receive notifications
-- Manage their company profile
+- Apply for open jobs
+- Track application status
+- Comment on job posts
+- Edit and delete their own comments
+- View all comments they have made
+- Receive linked notifications
+- Edit profile and resume
 
-**For admins**
-- Monitor system activity through logs
-- View and control user accounts
+**Employers**
 
----
+- Create, edit, view, and delete job posts
+- Review applicants
+- Accept or refuse applications
+- Receive notifications for applications and comment activity
+- View a simple dashboard chart
+- Edit company profile
+
+**Admins**
+
+- View platform totals
+- View a simple role distribution chart
+- Manage users
+- View user details
+- Delete user accounts
+- View activity logs
 
 ## Tech Stack
 
 | Layer | Technology |
 |---|---|
-| Framework | Laravel 12 |
-| Templating | Laravel Blade |
-| Styling | Tailwind CSS |
+| Framework | Laravel 13 |
+| Templating | Blade |
+| Styling | Tailwind CSS v4 |
+| JavaScript | Alpine.js |
 | Database | MySQL |
-| Auth | Laravel Sanctum |
+| Build tool | Vite |
 
----
+## Project Structure
 
-## Project Structure (high level)
-
-```
+```text
 app/
-├── Enums/           # UserRole, JobStatus, ApplicationStatus
-├── Models/          # User, Job, Application, Notification, Comment
-├── Http/
-│   ├── Controllers/
-│   ├── Middleware/
-│   └── Requests/
-resources/
-└── views/
-    ├── layouts/     # public and auth shell layouts
-    ├── components/  # reusable Blade components
-    ├── public/      # guest-facing pages
-    ├── auth/        # login and registration
-    ├── jobseeker/   # job seeker dashboard and pages
-    ├── employer/    # employer dashboard and pages
-    └── admin/       # admin dashboard and pages
-```
+  Enums/
+  Http/
+    Controllers/
+    Middleware/
+    Requests/
+  Models/
 
----
+database/
+  factories/
+  migrations/
+  seeders/
+
+public/
+  fonts/
+  images/
+
+resources/
+  css/
+  js/
+  views/
+
+routes/
+  web.php
+```
 
 ## Getting Started
 
 ### Requirements
-- PHP 8.4+
+
+- PHP 8.3+
 - Composer
 - MySQL
-- Node.js + npm
+- Node.js and npm
 
-### Installation
+### Install dependencies
 
 ```bash
-# Clone the repo
-git clone https://github.com/your-username/jhub.git
-cd jhub
-
-# Install PHP dependencies
 composer install
-
-# Install JS dependencies
 npm install
+```
 
-# Set up environment
+### Set up environment
+
+```bash
 cp .env.example .env
 php artisan key:generate
 ```
 
-### Configure your database
-
-Open `.env` and update these values:
+Update `.env` with your database details:
 
 ```env
 DB_CONNECTION=mysql
@@ -107,54 +116,58 @@ DB_USERNAME=root
 DB_PASSWORD=your_password
 ```
 
-### Run migrations and seed
+### Build database
 
 ```bash
 php artisan migrate:fresh --seed
 ```
 
-This will create all tables and populate the database with sample employers, job seekers, jobs, applications, comments, and notifications.
-
-### Start the dev server
+### Run locally
 
 ```bash
 php artisan serve
 npm run dev
 ```
 
-App will be running at `http://localhost:8000`.
+Open:
 
----
+```text
+http://localhost:8000
+```
 
 ## Default Seeded Accounts
 
 | Role | Email | Password |
 |---|---|---|
 | Admin | admin@jhub.com | password |
-| Employer | *(5 generated)* | password |
-| Job Seeker | *(20 generated)* | password |
+| Employer | generated by seeder | password |
+| Job Seeker | generated by seeder | password |
 
----
+## Project Team
 
-## Data Model Overview
+| Name | Role | GitHub |
+|---|---|---|
+| Abanda Ambrouise | Product Owner | https://github.com/AmbroiseAB |
+| Serge | Backend & Platform | https://github.com/CarmineAkanabe |
+| Christine | UI & Content | https://github.com/Krystyna21 |
+| Herbet | QA & Support | https://github.com/NkengH |
+| Samuel | Operations | https://github.com/Nsan-237 |
+| Mecula | Infrastructure | https://github.com/Dankun3 |
 
-- A **User** is either a Job Seeker, Employer, or Admin (role-based via enum)
-- An **Employer** owns many **Jobs**
-- A **Job Seeker** submits many **Applications**, one per job
-- Each **Application** has a status: `pending`, `accepted`, or `refused`
-- **Comments** are attached to jobs and written by users
-- **Notifications** are sent to any user and tracked by date
+## Data Model Summary
 
----
+- A `User` can be a job seeker, employer, or admin.
+- An employer owns many jobs.
+- A job seeker submits applications.
+- Jobs are stored in `jobs_post`, not `jobs`.
+- Applications have `pending`, `accepted`, or `refused` status.
+- Comments belong to jobs and users.
+- Notifications can include an optional `action_url`.
 
-## Notes
+## Documentation
 
-- The `job_posts` table is used for job listings (not `jobs`, which Laravel reserves for its queue system)
-- Role management is handled via the `UserRole` PHP enum — no separate roles table
-- Enums are stored as strings in the database for readability and portability
-
----
+Read `DOCUMENTATION.md` for the full beginner-friendly explanation of how the project works.
 
 ## License
 
-Class project — not licensed for production use.
+Class project. Not licensed for production use.

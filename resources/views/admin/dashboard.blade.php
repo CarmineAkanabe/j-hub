@@ -37,5 +37,27 @@
                 </div>
             </div>
         </div>
+
+        <div class="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
+            <div>
+                <h2 class="text-2xl font-semibold text-slate-900">Account Mix</h2>
+                <p class="mt-1 text-sm text-slate-600">Employer and job seeker distribution across the platform.</p>
+            </div>
+
+            <div class="mt-8 space-y-5">
+                @foreach ($roleChartData as $item)
+                    <div>
+                        <div class="mb-2 flex items-center justify-between gap-4">
+                            <span class="text-sm font-medium text-slate-700">{{ $item['label'] }}</span>
+                            <span class="text-sm font-semibold text-slate-900">{{ number_format($item['value']) }}</span>
+                        </div>
+                        <div class="h-4 overflow-hidden rounded-full bg-slate-100">
+                            <div class="h-full rounded-full bg-primary transition-all" style="width: {{ $item['width'] }}%">
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
     </div>
 @endsection

@@ -1,52 +1,119 @@
-Phase 1 — Tailwind + Fonts + App.css
-- Set up Tailwind v4 in `resources/css/app.css` with the color palette, font variables, and global styles.
-- Add local font loading for `Inter` and `Plus Jakarta Sans` from `public/fonts/`.
-- Standardize link hover behavior and button interaction transitions across the app.
+# J-Hub Implementation Summary
 
-Phase 2 — Layouts and Navigation
-- Built `resources/views/layouts/public.blade.php` and `resources/views/layouts/auth.blade.php`.
-- Implemented the public navbar and authenticated navbar with logout support.
+This file records what has been implemented. The main detailed explanation is now in `DOCUMENTATION.md`.
+
+## Completed Phases
+
+### Phase 1 - Tailwind, Fonts, and App CSS
+
+- Set up Tailwind CSS v4 in `resources/css/app.css`.
+- Added local font loading for Inter and Plus Jakarta Sans.
+- Added theme colors, font variables, and base interaction styles.
+- Added `[x-cloak]` support for Alpine-controlled UI.
+
+### Phase 2 - Layouts, Logo, Navigation, and Footer
+
+- Built `resources/views/layouts/public.blade.php`.
+- Built `resources/views/layouts/auth.blade.php`.
+- Added J-Hub SVG logo in `public/images/j-hub-logo.svg`.
+- Used the logo as favicon in both layouts.
+- Added the logo to public and authenticated navbars.
+- Built public and authenticated navbars.
 - Built role-specific sidebars for job seekers, employers, and admins.
-- Added active route highlighting and consistent sidebar behavior.
+- Added job seeker Comments link to the sidebar.
+- Fixed public layout so the footer stays at the bottom on short pages.
 
-Phase 3 — UI Primitives
-- Created reusable components: `x-ui.button`, `x-ui.input`, `x-ui.badge`, `x-ui.alert`, and `x-ui.modal`.
-- Switched button usage across pages to `x-ui.button` for consistent styling.
+### Phase 3 - UI Components
 
-Phase 4 — Public Experience
-- Implemented the home page, jobs listing, job detail page, and professional about page.
+- Created reusable UI primitives:
+  - `x-ui.button`
+  - `x-ui.input`
+  - `x-ui.badge`
+  - `x-ui.alert`
+  - `x-ui.modal`
+- Added reusable job, application, employer, admin, and user components.
+
+### Phase 4 - Public Experience
+
+- Implemented professional homepage with:
+  - background image carousel
+  - job search form
+  - database-backed stats
+  - featured jobs
+  - call-to-action sections
+- Added local stock images under `public/images/home`.
+- Implemented professional About page while preserving team names, roles, descriptions, and GitHub links.
+- Implemented public job listing and job detail pages.
 - Added job search, filtering, pagination, and job cards.
-- Ensured visitors can browse jobs and read the platform overview without logging in.
 
-Phase 5 — Authentication
-- Implemented login and separate registration flows for job seekers and employers.
-- Built `AuthController` and `RegisterController` with validation and role-based redirects.
-- Added secure logout handling via the authenticated navbar.
+### Phase 5 - Authentication
 
-Phase 6 — Job Seeker Features
-- Added the job seeker dashboard, application list, application detail page, profile editing, and notifications.
-- Implemented application submission from job detail pages.
-- Added job seeker comment creation on job detail pages and employer notification for new comments.
+- Implemented login.
+- Implemented separate job seeker registration.
+- Implemented separate employer registration.
+- Added role-based redirects after login/register.
+- Added secure logout handling.
 
-Phase 7 — Employer Features
-- Added the employer dashboard, job posting CRUD, applicant review pages, employer profile editing, and notifications.
-- Implemented applicant accept/refuse flows with notification delivery to the job seeker.
+### Phase 6 - Job Seeker Features
 
-Phase 8 — Admin Tools
-- Added the admin dashboard, user management pages, and system log viewer.
-- Logged admin account deletions and surfaced them in the admin logs page.
-- Included aggregate counts for users, jobs, applications, and comments.
+- Added job seeker dashboard.
+- Added application list and application detail pages.
+- Implemented job application submission.
+- Prevented duplicate applications.
+- Added profile editing.
+- Added notification list.
+- Added comment creation on job detail pages.
+- Added comment list page for job seekers.
+- Added comment edit and delete flows.
+- Added edit/delete controls for a job seeker's own comments on job detail pages.
 
-Phase 9 — Polish and Documentation
-- Refined sidebar, navbar, button, and layout styles to improve consistency.
-- Updated `DOCUMENTATION.md` and `TODO.md` to match the current implementation.
-- Verified that the current route and controller behavior aligns with the documented app flows.
+### Phase 7 - Employer Features
 
-Key Rules That Apply
+- Added employer dashboard.
+- Added dashboard bar chart comparing jobs posted and applications received.
+- Added job posting CRUD.
+- Added applicant list and applicant detail pages.
+- Added accept/refuse application flow.
+- Added profile editing.
+- Added notification list.
+- Employers receive notifications for:
+  - new applications
+  - new comments
+  - updated comments
+  - deleted comments
 
-- Tailwind v4 — use `@theme` in `app.css` only, no `tailwind.config.js`.
-- No CDN links — fonts live in `public/fonts/`, Alpine.js is installed via npm.
-- No image generation — UI assets are managed locally.
-- No new PHP files outside the existing Laravel structure.
-- Routes are only added by explicit instruction.
-- Alpine.js is imported in `resources/js/app.js` only.
+### Phase 8 - Admin Tools
+
+- Added admin dashboard.
+- Added dashboard bar chart comparing employers and job seekers.
+- Added user list and user detail pages.
+- Added user deletion.
+- Prevented admin self-deletion.
+- Added activity/log viewer.
+- Logged admin account deletions.
+
+### Phase 9 - Notifications
+
+- Added nullable `action_url` to notifications.
+- Notification lists show View buttons when a link exists.
+- Application notifications link to the relevant application/applicant page.
+- Comment notifications link to the relevant job or comment.
+- Deleted-user admin events remain log-related and do not use notification links.
+
+### Phase 10 - Documentation and Verification
+
+- Updated `README.md`.
+- Rebuilt `DOCUMENTATION.md` as a beginner-friendly full project guide.
+- Updated this implementation summary.
+- Verified routes, Blade templates, tests, and frontend build during development.
+
+## Current Status
+
+The project is feature-complete for the class project demo.
+
+## Notes for Future Improvements
+
+- Add more automated feature tests for login, applications, comments, and role access.
+- Add mobile navigation menu improvements.
+- Add read/unread notification status if needed.
+- Add richer charts later only if a chart library is desired. Current charts do not require migrations or extra packages.
