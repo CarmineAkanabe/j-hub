@@ -105,3 +105,16 @@
     --radius-md: 0.625rem;
     --radius-lg: 0.75rem;
 }
+
+/* Global link hover */
+a:hover {
+    color: #10B981;
+    transition: color 0.5s ease;
+}
+
+/* Button hover enhancements */
+button:hover {
+    background-color: var(--color-secondary-hover);
+    cursor: pointer;
+    transition: all 0.5s ease;
+}

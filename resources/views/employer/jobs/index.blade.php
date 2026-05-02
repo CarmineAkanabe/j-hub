@@ -43,8 +43,7 @@
                         <form action="{{ route('employer.jobs.destroy', $job) }}" method="POST" class="inline">
                             @csrf
                             @method('DELETE')
-                            <button type="submit"
-                                class="inline-flex items-center justify-center rounded-full bg-rose-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-rose-700">Delete</button>
+                            <x-ui.button type="submit" variant="danger">Delete</x-ui.button>
                         </form>
                     </div>
                 </div>

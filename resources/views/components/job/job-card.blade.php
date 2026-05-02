@@ -42,9 +42,6 @@
 
     <div class="flex justify-between items-center">
         <span class="text-xs text-slate-400">{{ $job->created_at->diffForHumans() }}</span>
-        <a href="{{ route('jobs.show', $job) }}"
-            class="inline-flex items-center rounded-full bg-primary-600 px-4 py-2 text-xs font-semibold text-white transition hover:bg-primary-700">
-            View Details
-        </a>
+        <x-ui.button href="{{ route('jobs.show', $job) }}" variant="primary">View Details</x-ui.button>
     </div>
 </div>

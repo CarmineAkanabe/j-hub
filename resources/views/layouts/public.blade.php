@@ -15,7 +15,7 @@
         @include('components.navbar.public-navbar')
     @endif
 
-    <main class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+    <main class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 pt-20">
         @yield('content')
     </main>
 

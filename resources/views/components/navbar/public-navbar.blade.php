@@ -1,4 +1,4 @@
-<header class="bg-slate-950 shadow-sm">
+<header class="fixed top-0 w-full bg-slate-950 shadow-sm z-50">
     <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
         <a href="/" class="text-lg font-semibold text-white">J-Hub</a>
 

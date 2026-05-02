@@ -9,10 +9,7 @@
         </div>
 
         <div>
-            <button type="submit"
-                class="inline-flex w-full items-center justify-center rounded-full bg-primary-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-primary-700">
-                Apply Filters
-            </button>
+            <x-ui.button type="submit" variant="primary" class="w-full">Apply Filters</x-ui.button>
         </div>
     </div>
 </div>

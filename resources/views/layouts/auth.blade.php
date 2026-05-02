@@ -11,15 +11,14 @@
 <body class="min-h-screen bg-slate-50 text-slate-900 font-body">
     @include('components.navbar.auth-navbar')
 
-    <div class="flex min-h-[calc(100vh-4rem)]">
+    <div class="flex min-h-screen">
         @yield('sidebar')
 
-        <main class="flex-1 bg-slate-50 px-4 py-8 sm:px-6 lg:px-8">
+        <main class="flex-1 bg-slate-50 px-4 py-8 sm:px-6 lg:px-8 pt-20">
             @yield('content')
         </main>
     </div>
-
-    @include('components.footer')
+    {{-- @include('components.footer') --}}
 </body>
 
 </html>
