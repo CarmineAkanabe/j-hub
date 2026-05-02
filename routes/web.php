@@ -2,13 +2,19 @@
 
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\LogController as AdminLogController;
+use App\Http\Controllers\Admin\UserController as AdminUserController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\Employer\ApplicantController as EmployerApplicantController;
 use App\Http\Controllers\Employer\DashboardController as EmployerDashboardController;
 use App\Http\Controllers\Employer\JobController as EmployerJobController;
 use App\Http\Controllers\Employer\NotificationController as EmployerNotificationController;
+use App\Http\Controllers\Employer\ProfileController as EmployerProfileController;
 use App\Http\Controllers\JobSeeker\ApplicationController as JobSeekerApplicationController;
 use App\Http\Controllers\JobSeeker\DashboardController as JobSeekerDashboardController;
 use App\Http\Controllers\JobSeeker\NotificationController as JobSeekerNotificationController;
+use App\Http\Controllers\JobSeeker\ProfileController as JobSeekerProfileController;
 use App\Http\Controllers\Public\HomeController;
 use App\Http\Controllers\Public\JobController;
 use Illuminate\Support\Facades\Route;
@@ -17,7 +23,10 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/jobs', [JobController::class, 'index'])->name('jobs.index');
 Route::get('/jobs/{job}', [JobController::class, 'show'])->name('jobs.show');
-Route::middleware(['auth', 'role:jobseeker'])->post('/jobs/{job}/apply', [JobSeekerApplicationController::class, 'store'])->name('jobs.apply');
+Route::middleware(['auth', 'role:jobseeker'])->group(function () {
+    Route::post('/jobs/{job}/apply', [JobSeekerApplicationController::class, 'store'])->name('jobs.apply');
+    Route::post('/jobs/{job}/comments', [CommentController::class, 'store'])->name('comments.store');
+});
 
 Route::middleware(['auth', 'role:employer'])->prefix('employer')->name('employer.')->group(function () {
     Route::get('/dashboard', [EmployerDashboardController::class, 'index'])->name('dashboard');
@@ -32,7 +41,8 @@ Route::middleware(['auth', 'role:employer'])->prefix('employer')->name('employer
     Route::get('/applicants/{application}', [EmployerApplicantController::class, 'show'])->name('applicants.show');
     Route::patch('/applicants/{application}/status', [EmployerApplicantController::class, 'updateStatus'])->name('applicants.updateStatus');
     Route::get('/notifications', [EmployerNotificationController::class, 'index'])->name('notifications.index');
-    Route::get('/profile', fn () => view('employer.profile.edit'))->name('profile');
+    Route::get('/profile', [EmployerProfileController::class, 'edit'])->name('profile');
+    Route::patch('/profile', [EmployerProfileController::class, 'update'])->name('profile.update');
 });
 
 Route::middleware(['auth', 'role:jobseeker'])->prefix('jobseeker')->name('jobseeker.')->group(function () {
@@ -40,7 +50,16 @@ Route::middleware(['auth', 'role:jobseeker'])->prefix('jobseeker')->name('jobsee
     Route::get('/applications', [JobSeekerApplicationController::class, 'index'])->name('applications.index');
     Route::get('/applications/{application}', [JobSeekerApplicationController::class, 'show'])->name('applications.show');
     Route::get('/notifications', [JobSeekerNotificationController::class, 'index'])->name('notifications.index');
-    Route::get('/profile', fn () => view('jobseeker.profile.edit'))->name('profile');
+    Route::get('/profile', [JobSeekerProfileController::class, 'edit'])->name('profile');
+    Route::patch('/profile', [JobSeekerProfileController::class, 'update'])->name('profile.update');
+});
+
+Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+    Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');
+    Route::get('/users/{user}', [AdminUserController::class, 'show'])->name('users.show');
+    Route::delete('/users/{user}', [AdminUserController::class, 'destroy'])->name('users.destroy');
+    Route::get('/logs', [AdminLogController::class, 'index'])->name('logs.index');
 });
 
 // === Auth Routes (Public) ===

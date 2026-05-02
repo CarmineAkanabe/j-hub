@@ -36,7 +36,7 @@ class JobController extends Controller
 
     public function show(Job $job)
     {
-        $job->load('employer');
+        $job->load(['employer', 'comments.user']);
 
         $userApplication = null;
         if (auth()->check() && auth()->user()->isJobSeeker()) {

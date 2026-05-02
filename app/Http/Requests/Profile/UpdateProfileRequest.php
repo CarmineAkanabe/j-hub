@@ -31,6 +31,7 @@ class UpdateProfileRequest extends FormRequest
             ],
             'resume' => ['nullable', 'string'],
             'company_name' => ['nullable', 'string'],
+            'password' => ['nullable', 'string', 'min:8', 'confirmed'],
         ];
     }
 }
