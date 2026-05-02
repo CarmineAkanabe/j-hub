@@ -556,9 +556,7 @@ Controls who can do what with Job listings.
 
 Controls who can do what with Applications.
 
-- **`create(User $user, Job $job)`** — returns `true` only if the user is a job seeker AND has not already applied to this specific job. Prevents duplicate applications and prevents employers from applying.
-- **`view(User $user, Application $application)`** — returns `true` only if the authenticated user is the job seeker who submitted this application. You cannot view someone else's application.
-- **`withdraw(User $user, Application $application)`** — returns `true` only if the user owns the application AND the status is still `PENDING`. You cannot withdraw an already-decided application.
+- This policy class exists as a scaffold, but the current methods return false by default and are not actively enforcing application permissions in the current implementation.
 
 ---
 
@@ -615,16 +613,15 @@ Handles public job browsing — no authentication required.
 
 ### `app/Http/Controllers/JobSeeker/DashboardController.php`
 
-- **`index()`** — fetch the authenticated job seeker's 5 most recent applications (with their job relation loaded), and their unread notifications count. Pass to `jobseeker.dashboard`.
+- **`index()`** — fetch the authenticated job seeker's total application count and return `jobseeker.dashboard`.
 
 ---
 
 ### `app/Http/Controllers/JobSeeker/ApplicationController.php`
 
 - **`index()`** — fetch all of the authenticated job seeker's applications, paginated, with the job relation loaded. Return `jobseeker.applications.index`.
-- **`show(Application $application)`** — authorize using `ApplicationPolicy@view`. Return `jobseeker.applications.show` with the application and its job loaded.
-- **`store(Job $job)`** — authorize using `ApplicationPolicy@create`. Create an Application record with `job_seeker_id = auth()->id()`, `job_id = $job->id`, `status = PENDING`, `date = today`. Redirect back with a success message.
-- **`withdraw(Application $application)`** — authorize using `ApplicationPolicy@withdraw`. Delete the application record. Redirect back with a success message.
+- **`show(Application $application)`** — return `jobseeker.applications.show` with the application and its job loaded.
+- **`store(Job $job)`** — create an Application record with `job_seeker_id = auth()->id()`, `job_id = $job->id`, `status = PENDING`, `date = today`. Redirect back with a success message.
 
 ---
 
@@ -683,14 +680,13 @@ Handles public job browsing — no authentication required.
 
 ### `app/Http/Controllers/CommentController.php`
 
-- **`store(Request $request, Job $job)`** — requires auth. Validate `content` (required, string, max 500 chars). Create a Comment with `user_id = auth()->id()`, `job_id = $job->id`, `date = today()`. Redirect back.
-- **`destroy(Comment $comment)`** — requires auth. Check that the authenticated user owns the comment OR is an admin. Delete the comment. Redirect back.
+- **`store(Request $request, Job $job)`** — requires auth. Validate `content` (required, string, max 1000 chars). Create a Comment with `user_id = auth()->id()`, `job_id = $job->id`, and `date = today`. Notify the employer. Redirect back.
 
 ---
 
 ### `app/Http/Controllers/Admin/DashboardController.php`
 
-- **`index()`** — fetch total count of users, jobs, and applications. Pass to `admin.dashboard`.
+- **`index()`** — fetch total count of users, jobs, applications, and comments. Pass to `admin.dashboard`.
 
 ---
 
@@ -738,11 +734,10 @@ POST /register/employer        → RegisterController@registerEmployer
 GET    /jobseeker                          → dashboard
 GET    /jobseeker/applications             → list applications
 GET    /jobseeker/applications/{id}        → view single application
-POST   /jobseeker/applications/{job}       → submit application
-DELETE /jobseeker/applications/{id}        → withdraw application
-GET    /jobseeker/profile/edit             → edit profile form
-PUT    /jobseeker/profile                  → save profile changes
+GET    /jobseeker/profile                  → edit profile form
+PATCH  /jobseeker/profile                  → save profile changes
 GET    /jobseeker/notifications            → list notifications
+POST   /jobs/{job}/apply                   → submit application
 ```
 
 **Employer routes** — middleware: `auth`, `role:employer`:
@@ -759,8 +754,8 @@ GET    /employer/jobs/{job}/applicants         → list applicants for job
 GET    /employer/jobs/{job}/applicants/{id}    → view single applicant
 POST   /employer/applications/{id}/accept      → accept application
 POST   /employer/applications/{id}/refuse      → refuse application
-GET    /employer/profile/edit                  → edit profile form
-PUT    /employer/profile                       → save profile changes
+GET    /employer/profile                      → edit profile form
+PATCH  /employer/profile                      → save profile changes
 GET    /employer/notifications                 → list notifications
 ```
 
@@ -773,10 +768,9 @@ DELETE /admin/users/{id}   → delete user
 GET    /admin/logs         → view system logs
 ```
 
-**Comment routes** — middleware: `auth`:
+**Comment routes** — middleware: `auth`, `role:jobseeker`:
 ```
 POST   /jobs/{job}/comments    → store comment
-DELETE /comments/{comment}     → delete comment
 ```
 
 ---
@@ -885,7 +879,7 @@ Props: `$job`. A small inline display of location, salary, and status badge. Use
 Props: `$job`. The form a job seeker submits to apply for a job. A simple POST form (no extra fields needed — the job seeker's identity comes from the session).
 
 **`components/application/application-card.blade.php`**
-Props: `$application`. A card showing one application from the job seeker's perspective — job title, company, submission date, status badge, and a withdraw button (if still pending).
+Props: `$application`. A card showing one application from the job seeker's perspective — job title, company, submission date, and status badge.
 
 **`components/application/application-status-badge.blade.php`**
 Props: `$status` (ApplicationStatus). Renders a colored badge pill based on status: yellow for pending, green for accepted, red for refused. Used everywhere an application status appears.
@@ -943,7 +937,7 @@ Props: `$color` (green/red/yellow/gray/blue), `$text`. A small pill-shaped label
 Props: `$type` (success/error/info/warning). Automatically reads `session('success')` and `session('error')` from Laravel's flash session. Dismissible via Alpine.js `x-show`. Place at the top of any view that performs actions.
 
 **`components/ui/modal.blade.php`**
-Props: `$id`, `$title`. A dialog overlay controlled by Alpine.js. Used for destructive action confirmations (delete job, delete user, withdraw application). The trigger button and the modal communicate via an Alpine `x-data` scope.
+Props: `$id`, `$title`. A dialog overlay controlled by Alpine.js. Used for destructive action confirmations such as delete job or delete user. The trigger button and the modal communicate via an Alpine `x-data` scope.
 
 ---
 
@@ -993,13 +987,13 @@ Employer registration form. Fields: name, email, password, password confirmation
 ### Job Seeker Pages
 
 **`jobseeker/dashboard.blade.php`**
-The job seeker's home after logging in. Shows a welcome message, a stats row (total applications, pending, accepted), a table of their 5 most recent applications, and a notifications count summary.
+The job seeker's home after logging in. Shows a welcome message and an overview of applications and account activity.
 
 **`jobseeker/applications/index.blade.php`**
 A paginated list of all the job seeker's applications as `<x-application.application-card>` components.
 
 **`jobseeker/applications/show.blade.php`**
-Detail view of a single application. Shows the job info and the current application status. If the status is still pending, shows a withdraw button with a confirmation modal.
+Detail view of a single application. Shows the job info and the current application status.
 
 **`jobseeker/profile/edit.blade.php`**
 Profile editing form for job seekers. Fields: name, email, resume. Success message shown via `<x-ui.alert>`.

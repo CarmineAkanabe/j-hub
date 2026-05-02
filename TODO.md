@@ -1,37 +1,52 @@
 Phase 1 — Tailwind + Fonts + App.css
-Purely CSS. Configure @theme in app.css with colors and font variables. Set up @font-face declarations pointing to /fonts/ directory. Nothing else.
-Phase 2 — Base Layouts
-Build layouts/public.blade.php and layouts/auth.blade.php as proper shells. Vite tags, font classes on body, @yield slots, nothing fancy yet — just the skeleton that everything else extends.
+- Set up Tailwind v4 in `resources/css/app.css` with the color palette, font variables, and global styles.
+- Add local font loading for `Inter` and `Plus Jakarta Sans` from `public/fonts/`.
+- Standardize link hover behavior and button interaction transitions across the app.
+
+Phase 2 — Layouts and Navigation
+- Built `resources/views/layouts/public.blade.php` and `resources/views/layouts/auth.blade.php`.
+- Implemented the public navbar and authenticated navbar with logout support.
+- Built role-specific sidebars for job seekers, employers, and admins.
+- Added active route highlighting and consistent sidebar behavior.
+
 Phase 3 — UI Primitives
-Build only: button, input, badge, alert, modal in components/ui/. And application-status-badge. No views yet — just these components so everything else can use them.
-Phase 4 — Navigation
-Build public navbar (with inline SVG logo), auth navbar, and all three sidebars. Alpine.js for mobile toggle and dropdowns. Active link detection. Nothing connects to routes yet — just the HTML structure.
-Phase 5 — Footer + Layouts Wired Up
-Build footer. Wire navbar and footer into both layouts. At this point npm run dev + php artisan serve should show a styled shell at any URL.
-Phase 6 — Home Page (Visible Milestone)
-Build HomeController, its route (GET /), and public/home.blade.php. Hero section (stock photo from public/images/hero.jpg + dark overlay, headline, search bar, two CTA buttons), featured jobs section (6 cards from DB), pitch section. This is the first thing you actually see in the browser.
-Phase 7 — Remaining Public Pages
-public/about.blade.php, public/jobs/index.blade.php, public/jobs/show.blade.php, search bar partial, filters partial, Public/JobController, and those routes. Job card and job meta components.
-Phase 8 — Auth Backend
-RoleMiddleware → register in bootstrap/app.php. All three Form Requests (Login, RegisterJobSeeker, RegisterEmployer). AuthController and RegisterController. Auth routes in web.php.
-Phase 9 — Auth Views
-auth/login.blade.php, auth/register/jobseeker.blade.php, auth/register/employer.blade.php. Wire them to the controllers. Test login redirects by role.
-Phase 10 — Job Seeker Backend + Views
-ApplicationPolicy, all JobSeeker controllers, jobseeker route group, all jobseeker views.
-Phase 11 — Employer Backend + Views
-JobPolicy, all Employer controllers, employer route group, all employer views.
-Phase 12 — Comments
-CommentController, comment routes, wire comment form into jobs/show.blade.php.
-Phase 13 — Admin Backend + Views
-UserPolicy, all Admin controllers, admin route group, admin views, user-row, log-row components.
-Phase 14 — Error Pages + Final Polish
-404, 403, 500. Auth redirect for already-logged-in users. CSRF/method audit. Full flow test. npm run build.
+- Created reusable components: `x-ui.button`, `x-ui.input`, `x-ui.badge`, `x-ui.alert`, and `x-ui.modal`.
+- Switched button usage across pages to `x-ui.button` for consistent styling.
 
-Key Rules That Will Be Hardcoded Into Every Phase
+Phase 4 — Public Experience
+- Implemented the home page, jobs listing, job detail page, and professional about page.
+- Added job search, filtering, pagination, and job cards.
+- Ensured visitors can browse jobs and read the platform overview without logging in.
 
-Tailwind v4 — @theme in app.css only, no tailwind.config.js
-No CDN links — fonts in public/fonts/, Alpine.js via npm
-No image generation — stock photos downloaded manually and placed in public/images/
-No new PHP files outside the ones explicitly listed
-Routes added only via explicit instruction — never auto-generated
-Alpine.js imported in resources/js/app.js only
+Phase 5 — Authentication
+- Implemented login and separate registration flows for job seekers and employers.
+- Built `AuthController` and `RegisterController` with validation and role-based redirects.
+- Added secure logout handling via the authenticated navbar.
+
+Phase 6 — Job Seeker Features
+- Added the job seeker dashboard, application list, application detail page, profile editing, and notifications.
+- Implemented application submission from job detail pages.
+- Added job seeker comment creation on job detail pages and employer notification for new comments.
+
+Phase 7 — Employer Features
+- Added the employer dashboard, job posting CRUD, applicant review pages, employer profile editing, and notifications.
+- Implemented applicant accept/refuse flows with notification delivery to the job seeker.
+
+Phase 8 — Admin Tools
+- Added the admin dashboard, user management pages, and system log viewer.
+- Logged admin account deletions and surfaced them in the admin logs page.
+- Included aggregate counts for users, jobs, applications, and comments.
+
+Phase 9 — Polish and Documentation
+- Refined sidebar, navbar, button, and layout styles to improve consistency.
+- Updated `DOCUMENTATION.md` and `TODO.md` to match the current implementation.
+- Verified that the current route and controller behavior aligns with the documented app flows.
+
+Key Rules That Apply
+
+- Tailwind v4 — use `@theme` in `app.css` only, no `tailwind.config.js`.
+- No CDN links — fonts live in `public/fonts/`, Alpine.js is installed via npm.
+- No image generation — UI assets are managed locally.
+- No new PHP files outside the existing Laravel structure.
+- Routes are only added by explicit instruction.
+- Alpine.js is imported in `resources/js/app.js` only.
