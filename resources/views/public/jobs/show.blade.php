@@ -13,7 +13,7 @@
                 <x-ui.badge variant="success">{{ ucfirst(optional($job->status)->value ?? $job->status) }}</x-ui.badge>
                 @if ($job->expected_salary)
                     <span
-                        class="rounded-full bg-slate-100 px-3 py-2 text-sm text-slate-700">${{ number_format($job->expected_salary) }}</span>
+                        class="rounded-full bg-slate-100 px-3 py-2 text-sm text-slate-700">FCFA {{ number_format($job->expected_salary) }}</span>
                 @endif
             </div>
         </div>
@@ -93,9 +93,9 @@
                             <p class="mt-4 text-sm text-slate-600">Please log in as a job seeker to comment on this job.</p>
                             <div class="mt-4 flex flex-col gap-3 sm:flex-row">
                                 <a href="{{ route('login') }}"
-                                    class="inline-flex items-center justify-center rounded-full bg-primary-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-primary-700">Login</a>
+                                    class="inline-flex items-center justify-center rounded-full bg-secondary-dark px-4 py-3 text-sm font-semibold text-primary-light transition hover:bg-primary-700">Login</a>
                                 <a href="{{ route('register.jobseeker.show') }}"
-                                    class="inline-flex items-center justify-center rounded-full border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-900 transition hover:bg-slate-100">Register</a>
+                                    class="inline-flex items-center justify-center rounded-full border border-slate-200 bg-secondary-dark px-4 py-3 text-sm font-semibold text-primary-light transition hover:bg-secondary-hover">Register</a>
                             </div>
                         @endif
                     </div>
@@ -137,9 +137,9 @@
                             seeker.</p>
                         <div class="flex flex-col gap-3 sm:flex-row">
                             <a href="{{ route('login') }}"
-                                class="inline-flex items-center justify-center rounded-full bg-primary-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-primary-700">Login</a>
+                                class="inline-flex items-center justify-center rounded-full bg-secondary-dark px-4 py-3 text-sm font-semibold text-primary-light transition hover:bg-secondary-hover">Login</a>
                             <a href="{{ route('register.jobseeker.show') }}"
-                                class="inline-flex items-center justify-center rounded-full border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-900 transition hover:bg-slate-100">Register</a>
+                                class="inline-flex items-center justify-center rounded-full border border-slate-200 bg-secondary-dark px-4 py-3 text-sm font-semibold text-secondary-light transition hover:bg-secondary-hover">Register</a>
                         </div>
                     @endif
                 </div>

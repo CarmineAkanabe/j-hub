@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\ApplicationStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Application extends Model
 {
@@ -18,12 +19,12 @@ class Application extends Model
         'date'   => 'date',
     ];
 
-    public function jobSeeker(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function jobSeeker(): BelongsTo
     {
         return $this->belongsTo(User::class, 'job_seeker_id');
     }
 
-    public function job(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function job(): BelongsTo
     {
         return $this->belongsTo(Job::class);
     }

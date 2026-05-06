@@ -41,7 +41,7 @@
                 'initials' => 'S',
             ],
             [
-                'name' => 'Mecula',
+                'name' => 'Mekoula',
                 'role' => 'Infrastructure',
                 'description' => 'Maintains the deployment readiness and assists with platform reliability and performance.',
                 'github' => 'https://github.com/Dankun3',

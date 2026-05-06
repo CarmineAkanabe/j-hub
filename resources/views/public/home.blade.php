@@ -137,7 +137,7 @@
                 </div>
                 <div class="rounded-3xl border border-slate-200 bg-slate-950 p-6 text-white">
                     <p class="text-sm font-semibold text-emerald-300">Simple by design</p>
-                    <h3 class="mt-3 text-xl font-bold">Laravel, Blade, Tailwind</h3>
+                    <h3 class="mt-3 text-xl font-bold">Complete Web App</h3>
                     <p class="mt-3 text-sm leading-6 text-slate-300">
                         The interface stays straightforward while the core portal features stay easy to extend.
                     </p>
