@@ -6,11 +6,14 @@ use App\Enums\ApplicationStatus;
 use App\Http\Controllers\Controller;
 use App\Models\Application;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class ApplicantController extends Controller
 {
     public function index()
     {
+        Gate::authorize('viewAny', Application::class);
+
         $employer = auth()->user();
 
         $applications = Application::with(['job.employer', 'jobSeeker'])
@@ -25,13 +28,9 @@ class ApplicantController extends Controller
 
     public function show(Application $application)
     {
-        $employer = auth()->user();
+        $application->load(['job.employer', 'jobSeeker']);
 
-        $application = Application::with(['job.employer', 'jobSeeker'])
-            ->whereHas('job', function ($query) use ($employer) {
-                $query->where('employer_id', $employer->id);
-            })
-            ->findOrFail($application->id);
+        Gate::authorize('view', $application);
 
         return view('employer.applicants.show', compact('application'));
     }
@@ -42,13 +41,9 @@ class ApplicantController extends Controller
             'status' => ['required', 'in:accepted,refused'],
         ]);
 
-        $employer = auth()->user();
+        $application->load(['job', 'jobSeeker']);
 
-        $application = Application::where('id', $application->id)
-            ->whereHas('job', function ($query) use ($employer) {
-                $query->where('employer_id', $employer->id);
-            })
-            ->firstOrFail();
+        Gate::authorize('update', $application);
 
         $status = ApplicationStatus::from($request->input('status'));
 

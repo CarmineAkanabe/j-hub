@@ -3,62 +3,43 @@
 namespace App\Policies;
 
 use App\Models\Application;
+use App\Models\Job;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class ApplicationPolicy
 {
-    /**
-     * Determine whether the user can view any models.
-     */
     public function viewAny(User $user): bool
     {
-        return false;
+        return $user->isJobSeeker() || $user->isEmployer() || $user->isAdmin();
     }
 
-    /**
-     * Determine whether the user can view the model.
-     */
     public function view(User $user, Application $application): bool
     {
-        return false;
+        return $user->isAdmin()
+            || $application->job_seeker_id === $user->id
+            || $application->job?->employer_id === $user->id;
     }
 
-    /**
-     * Determine whether the user can create models.
-     */
-    public function create(User $user): bool
+    public function create(User $user, ?Job $job = null): bool
     {
-        return false;
+        return $user->isJobSeeker();
     }
 
-    /**
-     * Determine whether the user can update the model.
-     */
     public function update(User $user, Application $application): bool
     {
-        return false;
+        return $user->isEmployer() && $application->job?->employer_id === $user->id;
     }
 
-    /**
-     * Determine whether the user can delete the model.
-     */
     public function delete(User $user, Application $application): bool
     {
         return false;
     }
 
-    /**
-     * Determine whether the user can restore the model.
-     */
     public function restore(User $user, Application $application): bool
     {
         return false;
     }
 
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
     public function forceDelete(User $user, Application $application): bool
     {
         return false;

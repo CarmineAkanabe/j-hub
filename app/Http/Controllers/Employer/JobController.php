@@ -7,11 +7,14 @@ use App\Http\Requests\Job\StoreJobRequest;
 use App\Http\Requests\Job\UpdateJobRequest;
 use App\Models\Job;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class JobController extends Controller
 {
     public function index()
     {
+        Gate::authorize('viewAny', Job::class);
+
         $jobs = auth()->user()->jobs()->withCount('applications')->latest()->paginate(10);
 
         return view('employer.jobs.index', compact('jobs'));
@@ -19,11 +22,15 @@ class JobController extends Controller
 
     public function create()
     {
+        Gate::authorize('create', Job::class);
+
         return view('employer.jobs.create');
     }
 
     public function store(StoreJobRequest $request)
     {
+        Gate::authorize('create', Job::class);
+
         auth()->user()->jobs()->create($request->validated());
 
         return redirect()->route('employer.jobs.index')->with('success', 'Job posted successfully.');
@@ -31,21 +38,24 @@ class JobController extends Controller
 
     public function show(Job $job)
     {
-        $job = auth()->user()->jobs()->with('applications')->findOrFail($job->id);
+        Gate::authorize('view', $job);
+
+        $job->load('applications');
 
         return view('employer.jobs.show', compact('job'));
     }
 
     public function edit(Job $job)
     {
-        $job = auth()->user()->jobs()->findOrFail($job->id);
+        Gate::authorize('update', $job);
 
         return view('employer.jobs.edit', compact('job'));
     }
 
     public function update(UpdateJobRequest $request, Job $job)
     {
-        $job = auth()->user()->jobs()->findOrFail($job->id);
+        Gate::authorize('update', $job);
+
         $job->update($request->validated());
 
         return redirect()->route('employer.jobs.index')->with('success', 'Job updated successfully.');
@@ -53,7 +63,8 @@ class JobController extends Controller
 
     public function destroy(Job $job)
     {
-        $job = auth()->user()->jobs()->findOrFail($job->id);
+        Gate::authorize('delete', $job);
+
         $job->delete();
 
         return redirect()->route('employer.jobs.index')->with('success', 'Job removed successfully.');

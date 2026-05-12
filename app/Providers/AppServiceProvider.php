@@ -3,9 +3,11 @@
 namespace App\Providers;
 
 use App\Models\Application;
+use App\Models\Comment;
 use App\Models\Job;
 use App\Models\User;
 use App\Policies\ApplicationPolicy;
+use App\Policies\CommentPolicy;
 use App\Policies\JobPolicy;
 use App\Policies\UserPolicy;
 use Illuminate\Support\Facades\Gate;
@@ -28,6 +30,7 @@ class AppServiceProvider extends ServiceProvider
     {
         Gate::policy(Job::class, JobPolicy::class);
         Gate::policy(Application::class, ApplicationPolicy::class);
+        Gate::policy(Comment::class, CommentPolicy::class);
         Gate::policy(User::class, UserPolicy::class);
     }
 }

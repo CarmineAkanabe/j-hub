@@ -107,6 +107,19 @@ This file records what has been implemented. The main detailed explanation is no
 - Updated this implementation summary.
 - Verified routes, Blade templates, tests, and frontend build during development.
 
+### Phase 11 - Policy-Based Authorization
+
+- Replaced placeholder deny-all policies with active authorization rules.
+- Kept role middleware for broad route access.
+- Added model policies for ownership checks:
+  - `JobPolicy`
+  - `ApplicationPolicy`
+  - `CommentPolicy`
+  - `UserPolicy`
+- Registered `CommentPolicy` in `AppServiceProvider`.
+- Updated controllers to call `Gate::authorize(...)` before protected model actions.
+- Added feature tests for cross-user and cross-employer authorization behavior.
+
 ## Current Status
 
 The project is feature-complete for the class project demo.

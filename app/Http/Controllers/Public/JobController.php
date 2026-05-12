@@ -6,6 +6,7 @@ use App\Enums\JobStatus;
 use App\Http\Controllers\Controller;
 use App\Models\Job;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class JobController extends Controller
 {
@@ -36,6 +37,10 @@ class JobController extends Controller
 
     public function show(Job $job)
     {
+        if ($job->status !== JobStatus::OPEN) {
+            Gate::authorize('view', $job);
+        }
+
         $job->load(['employer', 'comments.user']);
 
         $userApplication = null;

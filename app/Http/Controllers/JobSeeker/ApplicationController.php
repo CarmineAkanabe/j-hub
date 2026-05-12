@@ -8,11 +8,14 @@ use App\Http\Controllers\Controller;
 use App\Models\Application;
 use App\Models\Job;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class ApplicationController extends Controller
 {
     public function index()
     {
+        Gate::authorize('viewAny', Application::class);
+
         $applications = auth()->user()->applications()->with('job.employer')->latest()->paginate(10);
 
         return view('jobseeker.applications.index', compact('applications'));
@@ -20,13 +23,17 @@ class ApplicationController extends Controller
 
     public function show(Application $application)
     {
-        $application = auth()->user()->applications()->with('job.employer')->findOrFail($application->id);
+        $application->load('job.employer');
+
+        Gate::authorize('view', $application);
 
         return view('jobseeker.applications.show', compact('application'));
     }
 
     public function store(Job $job)
     {
+        Gate::authorize('create', [Application::class, $job]);
+
         $user = auth()->user();
 
         if ($user->applications()->where('job_id', $job->id)->exists()) {

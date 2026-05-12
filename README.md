@@ -163,6 +163,8 @@ http://localhost:8000
 - Applications have `pending`, `accepted`, or `refused` status.
 - Comments belong to jobs and users.
 - Notifications can include an optional `action_url`.
+- Route middleware checks broad role access.
+- Policies check ownership and allowed actions for jobs, applications, comments, and users.
 
 ## Documentation
 

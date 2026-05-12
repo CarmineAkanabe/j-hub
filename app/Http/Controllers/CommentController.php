@@ -5,11 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\Comment;
 use App\Models\Job;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class CommentController extends Controller
 {
     public function index()
     {
+        Gate::authorize('viewAny', Comment::class);
+
         $comments = auth()->user()
             ->comments()
             ->with('job.employer')
@@ -21,6 +24,8 @@ class CommentController extends Controller
 
     public function store(Request $request, Job $job)
     {
+        Gate::authorize('create', [Comment::class, $job]);
+
         $request->validate([
             'content' => ['required', 'string', 'max:1000'],
         ]);
@@ -46,10 +51,9 @@ class CommentController extends Controller
 
     public function edit(Comment $comment)
     {
-        $comment = auth()->user()
-            ->comments()
-            ->with('job.employer')
-            ->findOrFail($comment->id);
+        $comment->load('job.employer');
+
+        Gate::authorize('update', $comment);
 
         return view('jobseeker.comments.edit', compact('comment'));
     }
@@ -60,10 +64,9 @@ class CommentController extends Controller
             'content' => ['required', 'string', 'max:1000'],
         ]);
 
-        $comment = auth()->user()
-            ->comments()
-            ->with('job.employer')
-            ->findOrFail($comment->id);
+        $comment->load('job.employer');
+
+        Gate::authorize('update', $comment);
 
         $comment->update([
             'content' => $request->input('content'),
@@ -83,10 +86,9 @@ class CommentController extends Controller
 
     public function destroy(Comment $comment)
     {
-        $comment = auth()->user()
-            ->comments()
-            ->with('job.employer')
-            ->findOrFail($comment->id);
+        $comment->load('job.employer');
+
+        Gate::authorize('delete', $comment);
 
         $job = $comment->job;
 

@@ -70,6 +70,10 @@ app/
     Requests/
   Models/
   Policies/
+    ApplicationPolicy.php
+    CommentPolicy.php
+    JobPolicy.php
+    UserPolicy.php
 
 database/
   factories/
@@ -301,7 +305,7 @@ POST   /jobs/{job}/apply
 POST   /jobs/{job}/comments
 ```
 
-Important safety detail: when editing, updating, deleting, or viewing comments/applications, the controller checks through the logged-in user's relationship. This prevents one job seeker from managing another job seeker's records.
+Important safety detail: when editing, updating, deleting, or viewing comments/applications, controllers call policies before the action is completed. This prevents one user from managing another user's records.
 
 ### Employer routes
 
@@ -325,7 +329,7 @@ GET    /employer/profile
 PATCH  /employer/profile
 ```
 
-Employer job routes only operate on jobs owned by the logged-in employer.
+Employer job routes are protected by `JobPolicy`, so employers can only view, edit, update, and delete jobs they own.
 
 ### Admin routes
 
@@ -395,7 +399,7 @@ When a comment is created, updated, or deleted, the employer who owns the job ge
 
 `Admin\DashboardController` loads totals and a simple chart comparing employer accounts with job seeker accounts.
 
-`Admin\UserController` lists users, shows user details, and deletes user accounts. It prevents an admin from deleting their own account.
+`Admin\UserController` lists users, shows user details, and deletes user accounts. `UserPolicy` prevents an admin from deleting their own account.
 
 `Admin\LogController` builds a readable activity list from recent users, applications, comments, and deletion log entries.
 
@@ -430,6 +434,29 @@ The middleware checks:
 2. Does the user's role match the required role?
 
 If not, the user is redirected or gets a 403 error.
+
+Middleware only answers the broad role question, such as "is this user an employer?" or "is this user an admin?" It does not decide whether a user owns one specific job, application, or comment.
+
+## 11.1 Policies
+
+Policies protect model-specific actions. They answer ownership and permission questions such as:
+
+- Can this employer view, edit, or delete this exact job?
+- Can this employer review this exact application?
+- Can this job seeker view this exact application?
+- Can this job seeker edit or delete this exact comment?
+- Can this admin delete this exact user account?
+
+Policy files live in `app/Policies` and are registered in `app/Providers/AppServiceProvider.php`.
+
+Current policies:
+
+- `JobPolicy`: employers can create jobs; job owners can view, update, and delete their own jobs; admins can view jobs.
+- `ApplicationPolicy`: job seekers can create applications; job seekers can view their own applications; employers can view and update applications attached to their own jobs; admins can view applications.
+- `CommentPolicy`: job seekers can create comments; comment authors can update and delete their own comments; admins, authors, and job owners can view comments.
+- `UserPolicy`: admins can list and view users; admins can delete users except their own account.
+
+Controllers call policies with `Gate::authorize(...)` before protected model actions. The role middleware still remains in place, so policies do not replace login or role checks. They add the more precise ownership checks.
 
 ## 12. Views and Layouts
 
@@ -925,6 +952,7 @@ Password: password
 - If you add a new form, use CSRF protection with `@csrf`.
 - If a form updates or deletes something, use `@method('PATCH')`, `@method('PUT')`, or `@method('DELETE')`.
 - If you add a new protected page, place it in the correct role middleware group.
+- If a protected page acts on a specific model, add or update a policy and call `Gate::authorize(...)` in the controller.
 - If you add a new notification that should link somewhere, set `action_url`.
 - Keep public images in `public/images`.
 - Keep reusable UI in Blade components when it appears in multiple places.
@@ -948,5 +976,6 @@ Implemented:
 - Sticky-bottom footer on public pages
 - Error pages
 - Seeded demo data
+- Active policies for job, application, comment, and user authorization
 
 The app is ready for demonstration as a class project.
