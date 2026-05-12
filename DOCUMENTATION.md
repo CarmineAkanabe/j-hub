@@ -341,9 +341,11 @@ GET    /admin/users
 GET    /admin/users/{user}
 DELETE /admin/users/{user}
 GET    /admin/logs
+GET    /admin/profile
+PATCH  /admin/profile
 ```
 
-Admins can view users, delete users, and view logs/activity.
+Admins can view users, delete users, view paginated logs/activity, and edit their own profile.
 
 ## 9. Controllers
 
@@ -355,7 +357,7 @@ Admins can view users, delete users, and view logs/activity.
 
 ### Auth controllers
 
-`AuthController` handles login, logout, and redirecting users to the correct dashboard after login.
+`AuthController` handles login, logout, and redirecting users to the correct dashboard after login. Login and registration routes use guest middleware, so logged-in users cannot accidentally create or switch accounts through the public auth pages.
 
 `RegisterController` handles separate job seeker and employer registration.
 
@@ -401,7 +403,9 @@ When a comment is created, updated, or deleted, the employer who owns the job ge
 
 `Admin\UserController` lists users, shows user details, and deletes user accounts. `UserPolicy` prevents an admin from deleting their own account.
 
-`Admin\LogController` builds a readable activity list from recent users, applications, comments, and deletion log entries.
+`Admin\LogController` builds a readable paginated activity list from recent users, applications, comments, and deletion log entries.
+
+`Admin\ProfileController` lets admins update their own name, email, and password.
 
 ## 10. Validation
 
@@ -538,6 +542,7 @@ Admin sidebar:
 - Dashboard
 - Users
 - Logs
+- Profile
 
 ### Footer
 
@@ -603,6 +608,8 @@ Shows:
 File: `resources/views/auth/login.blade.php`
 
 Allows users to log in. After login, users are redirected based on role.
+
+The login and registration pages are guest-only. If a user is already logged in, Laravel redirects them away from these pages.
 
 ### Job seeker registration
 
@@ -700,7 +707,7 @@ Files:
 - `resources/views/employer/applicants/index.blade.php`
 - `resources/views/employer/applicants/show.blade.php`
 
-Employers can review applicants and update application status.
+Employers can review applicants, view the job seeker's resume, and update application status.
 
 When an application is accepted or refused, the job seeker gets a linked notification.
 
@@ -748,7 +755,13 @@ Shows details for one user. Admins can delete users from here.
 
 File: `resources/views/admin/logs/index.blade.php`
 
-Shows activity entries and admin deletion log entries.
+Shows paginated activity entries and admin deletion log entries.
+
+### Profile
+
+File: `resources/views/admin/profile/edit.blade.php`
+
+Allows admins to edit their name, email, and password.
 
 ## 19. Components
 
@@ -774,6 +787,8 @@ Application components:
 - `x-application.application-card`
 - `x-application.application-form`
 - `x-application.application-status-badge`
+
+The application status badge accepts either raw status strings or `ApplicationStatus` enum values, and falls back to pending styling for unexpected values.
 
 Admin and employer components:
 
@@ -952,6 +967,7 @@ Password: password
 - If you add a new form, use CSRF protection with `@csrf`.
 - If a form updates or deletes something, use `@method('PATCH')`, `@method('PUT')`, or `@method('DELETE')`.
 - If you add a new protected page, place it in the correct role middleware group.
+- Keep login and registration routes guest-only so authenticated users cannot accidentally switch accounts.
 - If a protected page acts on a specific model, add or update a policy and call `Gate::authorize(...)` in the controller.
 - If you add a new notification that should link somewhere, set `action_url`.
 - Keep public images in `public/images`.
@@ -970,10 +986,12 @@ Implemented:
 - Linked notifications
 - Employer job CRUD
 - Employer applicant review and status decisions
-- Admin dashboard, users, and logs
+- Employer applicant resume visibility
+- Admin dashboard, users, paginated logs, and profile editing
 - Dashboard bar charts using existing data
 - SVG J-Hub logo and favicon
 - Sticky-bottom footer on public pages
+- Polished sticky sidebars for authenticated pages
 - Error pages
 - Seeded demo data
 - Active policies for job, application, comment, and user authorization

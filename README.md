@@ -2,7 +2,7 @@
 
 J-Hub is a Laravel job portal built as a class project. It connects job seekers, employers, and admins in one clean web application.
 
-Visitors can browse jobs. Job seekers can apply, track applications, manage comments, and receive linked notifications. Employers can post jobs, review applicants, accept/refuse applications, and receive activity notifications. Admins can monitor users, logs, and platform totals.
+Visitors can browse jobs. Job seekers can apply, track applications, manage comments, and receive linked notifications. Employers can post jobs, review applicants, view candidate resumes, accept/refuse applications, and receive activity notifications. Admins can monitor users, logs, platform totals, and manage their own profile.
 
 ## Main Features
 
@@ -27,7 +27,7 @@ Visitors can browse jobs. Job seekers can apply, track applications, manage comm
 **Employers**
 
 - Create, edit, view, and delete job posts
-- Review applicants
+- Review applicants and view candidate resumes
 - Accept or refuse applications
 - Receive notifications for applications and comment activity
 - View a simple dashboard chart
@@ -40,7 +40,8 @@ Visitors can browse jobs. Job seekers can apply, track applications, manage comm
 - Manage users
 - View user details
 - Delete user accounts
-- View activity logs
+- View paginated activity logs
+- Edit admin profile
 
 ## Tech Stack
 

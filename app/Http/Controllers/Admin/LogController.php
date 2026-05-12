@@ -6,11 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Models\Application;
 use App\Models\Comment;
 use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Carbon;
 
 class LogController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $activity = collect()
             ->merge(User::latest()->take(10)->get()->map(function ($user) {
@@ -53,6 +55,18 @@ class LogController extends Controller
         }
 
         $activity = $activity->sortByDesc('date')->values();
+        $perPage = 10;
+        $page = LengthAwarePaginator::resolveCurrentPage();
+        $activity = new LengthAwarePaginator(
+            $activity->forPage($page, $perPage),
+            $activity->count(),
+            $perPage,
+            $page,
+            [
+                'path' => $request->url(),
+                'query' => $request->query(),
+            ],
+        );
 
         return view('admin.logs.index', compact('activity'));
     }

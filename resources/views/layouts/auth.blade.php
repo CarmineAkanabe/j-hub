@@ -15,7 +15,7 @@
     <div class="flex flex-1">
         @yield('sidebar')
 
-        <main class="flex-1 bg-slate-50 px-4 py-8 sm:px-6 lg:px-8 pt-20">
+        <main class="flex-1 bg-slate-50 px-4 py-8 pt-20 sm:px-6 lg:px-10">
             @yield('content')
         </main>
     </div>

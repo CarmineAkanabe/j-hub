@@ -59,6 +59,17 @@
                     </div>
 
                     <div>
+                        <h2 class="text-xl font-semibold text-slate-900">Candidate Resume</h2>
+                        <div class="mt-4 rounded-3xl border border-slate-200 bg-slate-50 p-6">
+                            @if ($application->jobSeeker->resume)
+                                <p class="whitespace-pre-line text-sm leading-6 text-slate-700">{{ $application->jobSeeker->resume }}</p>
+                            @else
+                                <p class="text-sm text-slate-600">This candidate has not added a resume yet.</p>
+                            @endif
+                        </div>
+                    </div>
+
+                    <div>
                         <h2 class="text-xl font-semibold text-slate-900">Job Posting</h2>
                         <p class="mt-4 text-base font-semibold text-slate-900">{{ $application->job->title }}</p>
                         <p class="mt-1 text-sm text-slate-600">{{ $application->job->location }} ·

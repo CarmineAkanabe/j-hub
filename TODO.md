@@ -21,6 +21,7 @@ This file records what has been implemented. The main detailed explanation is no
 - Built public and authenticated navbars.
 - Built role-specific sidebars for job seekers, employers, and admins.
 - Added job seeker Comments link to the sidebar.
+- Polished authenticated sidebars with sticky positioning, account headers, cleaner active states, and improved spacing.
 - Fixed public layout so the footer stays at the bottom on short pages.
 
 ### Phase 3 - UI Components
@@ -51,6 +52,7 @@ This file records what has been implemented. The main detailed explanation is no
 - Implemented login.
 - Implemented separate job seeker registration.
 - Implemented separate employer registration.
+- Made login and registration routes guest-only to prevent authenticated users from accidentally switching accounts.
 - Added role-based redirects after login/register.
 - Added secure logout handling.
 
@@ -73,6 +75,7 @@ This file records what has been implemented. The main detailed explanation is no
 - Added dashboard bar chart comparing jobs posted and applications received.
 - Added job posting CRUD.
 - Added applicant list and applicant detail pages.
+- Added job seeker resume visibility on the employer applicant detail page.
 - Added accept/refuse application flow.
 - Added profile editing.
 - Added notification list.
@@ -90,7 +93,9 @@ This file records what has been implemented. The main detailed explanation is no
 - Added user deletion.
 - Prevented admin self-deletion.
 - Added activity/log viewer.
+- Paginated the admin activity/log viewer.
 - Logged admin account deletions.
+- Added admin profile editing for name, email, and password.
 
 ### Phase 9 - Notifications
 
@@ -119,6 +124,13 @@ This file records what has been implemented. The main detailed explanation is no
 - Registered `CommentPolicy` in `AppServiceProvider`.
 - Updated controllers to call `Gate::authorize(...)` before protected model actions.
 - Added feature tests for cross-user and cross-employer authorization behavior.
+
+### Phase 12 - Small UX and Documentation Updates
+
+- Updated the application status badge to safely accept raw strings or `ApplicationStatus` enum values.
+- Added a fallback pending style for unexpected application status values.
+- Improved authenticated page padding.
+- Updated `README.md`, `DOCUMENTATION.md`, and this implementation summary with the latest behavior.
 
 ## Current Status
 
